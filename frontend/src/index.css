@@ -1,13 +1,148 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --bgColorDark: #131129;
+  --fontColorWhite: #fff;
+  --bluebg: #2F2CD8;
+  --fontbodyColor: #7184ad;
+
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Over Ride */
+
+.form-control:focus {
+
+  box-shadow: none !important;
+}
+
+/* 
+------- SIGN UP ETC PAGES 
+*/
+
+#signup {
+  background-color: var(--bgColorDark);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 200px;
+}
+
+#signup .rightSide {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 40px 20px;
+}
+
+
+#signup .leftSide {
+  background-color: var(--bluebg);
+  padding: 40px 20px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-image: url(https://media.licdn.com/dms/image/D5612AQGplp7JKG6Iiw/article-cover_image-shrink_720_1280/0/1673950361361?e=2147483647&v=beta&t=NxzErCoXqQ-xwkHJZZkKGKYNA21hJh3oNMUJzNKQr9M);
+  background-repeat: repeat;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  background-origin: content-box;
+  /* height: 100%; */
+}
+
+#signup .leftSide div {
+  padding: 0 30px;
+}
+
+
+#signup .rightSide .error {
+  color: red;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+#signup .alreadyHaveAccount p {
+  color: var(--fontbodyColor);
+  font-weight: 500;
+}
+
+#signup label {
+  color: var(--fontbodyColor);
+  font-weight: 500;
+}
+
+#signup input {
+  color: #ffff;
+  background-color: var(--bgColorDark);
+}
+
+
+/* xl */
+@media only screen and (max-width: 1200px) {
+
+
+  #signup {
+    /* background-color: yellow; */
+    padding: 50px 100px;
+  }
+
+}
+
+
+/* lg */
+@media only screen and (max-width: 992px) {
+
+
+  #signup {
+    background-color: red;
+    padding: 50px;
+  }
+
+
+}
+
+/* md */
+@media only screen and (max-width: 768px) {
+
+
+  #signup {
+    /* background-color: green; */
+    height: auto;
+    padding: 20px;
+  }
+
+
+  #signup .leftSide {
+
+    border-top-right-radius: 10px;
+  }
+
+  #signup .rightSide {
+    margin-top: -20px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+}
+
+
+/* sm */
+@media only screen and (max-width: 576px) {
+
+
+  #signup {
+    background-color: black;
+    height: auto;
+    padding: 20px;
+  }
+
+  #signup .leftSide {
+    height: 200px;
+    border-top-right-radius: 10px;
+  }
+
+  #signup .rightSide {
+    margin-top: -20px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
 }
