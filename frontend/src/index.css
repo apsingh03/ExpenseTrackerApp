@@ -3,6 +3,7 @@
   --fontColorWhite: #fff;
   --bluebg: #2F2CD8;
   --fontbodyColor: #7184ad;
+  --bgColorlittleDark: #1D1933;
 
 }
 
@@ -74,6 +75,191 @@
   background-color: var(--bgColorDark);
 }
 
+/* 
+----------- HOME PAGE 
+*/
+
+
+#homePage header {
+
+  background-color: var(--bgColorDark);
+  padding: 25px 40px;
+  position: relative;
+  width: 94%;
+  /* float: right; */
+  right: 0;
+  position: absolute;
+
+}
+
+#homePage header a {
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+#homePage header .iconContainer>.icon {
+  padding-left: 25px;
+}
+
+#homePage header .icon svg {
+  font-size: 30px;
+  color: #fff;
+
+}
+
+#homePage header .iconContainer div:nth-child(3) {
+  background-color: var(--bluebg);
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  position: relative;
+  margin-left: 25px;
+}
+
+
+#homePage header .iconContainer div:nth-child(3) div {
+  position: absolute;
+  left: 25%;
+}
+
+#homePage header .notification {
+  position: relative;
+}
+
+#homePage header .notification .notificationContent {
+  background-color: var(--bgColorlittleDark);
+  position: absolute;
+  padding: 10px;
+  top: 40px;
+  left: -100px;
+  width: 150px;
+
+}
+
+
+#homePage header .notification .notificationContent a {
+  padding: 10px 20px;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+
+/* 
+------- Side NAVIGATION .belowLeftSide
+*/
+
+#homePage .belowLeftSide {
+  /* height: 100vh; */
+  background-color: var(--bluebg);
+  width: 6%;
+}
+
+#homePage .belowLeftSide>div {
+
+  /* width: 100%; */
+  padding: 20px 43px;
+}
+
+
+#homePage .belowLeftSide a {
+  /* font-size: 40px; */
+  text-decoration: none;
+
+
+}
+
+#homePage .belowLeftSide nav {
+  margin-top: 80%;
+}
+
+#homePage .belowLeftSide nav>div {
+  margin-bottom: 25px;
+}
+
+#homePage .belowLeftSide .icon svg {
+  font-size: 35px;
+  color: #fff;
+
+}
+
+/* 
+------- Side NAVIGATION .belowRightSide
+*/
+#homePage .belowRightSide {
+  /* float: right; */
+  /* height: 100vh; */
+  width: 94%;
+  background-color: var(--bgColorDark);
+  margin-top: 85px;
+
+}
+
+#homePage .belowRightSide .breadcrumbs a {
+  color: #7184ad;
+  display: inline-block;
+  font-size: 14px;
+  text-decoration: none;
+
+}
+
+#homePage .belowRightSide .breadcrumbs svg {
+  margin: 0 10px;
+  font-size: 20px;
+  color: #7184ad;
+
+}
+
+
+/*
+---------------  HOME PAGE CONTENT  
+*/
+
+#homePage .cardContainer1 {
+  margin-top: 30px;
+}
+
+#homePage .cardContainer1 div .card {
+  background-color: var(--bgColorlittleDark);
+  padding: 20px 20px 5px 20px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+
+}
+
+#homePage .cardContainer1 div .card h6 {
+  font-size: 14px;
+}
+
+#homePage .cardContainer1 div .card .divider {
+  border-top: 1px solid rgb(229, 234, 239);
+  border-color: rgba(255, 255, 255, 0.08);
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+#homePage .cardContainer2 {
+  margin-top: 30px;
+}
+
+#homePage .cardContainer2 .card {
+  padding: 10px;
+  border: 1px solid #ffffff14;
+  background-color: var(--bgColorlittleDark);
+  color: #fff;
+}
+
+#homePage .cardContainer2 .expenseBreakdown:not(:last-child) {
+  border-bottom: 1px solid #ffffff14;
+  padding: 0px 10px;
+}
+
+
+
+/* 
+---------------------------- RESPONSIVE BREAKPOINTS 
+*/
 
 /* xl */
 @media only screen and (max-width: 1200px) {
