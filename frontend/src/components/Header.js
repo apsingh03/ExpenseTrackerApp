@@ -15,11 +15,20 @@ const Header = () => {
     <>
       <header className="d-flex flex-row justify-content-between  ">
         <div>
-          <input
-            type="text"
-            placeholder="Search box"
-            className="form-control"
-          />
+          <Link
+            to="/signup"
+            style={{ fontSize: "20px" }}
+            className="text-white text-decoration-underline mx-4"
+          >
+            Sign Up
+          </Link>
+          <Link
+            to="/signin"
+            style={{ fontSize: "20px" }}
+            className="text-white text-decoration-underline "
+          >
+            Sign In
+          </Link>
         </div>
 
         <div className="iconContainer d-flex flex-row justify-content-between ailign-items-center">
@@ -30,26 +39,13 @@ const Header = () => {
           <div className="icon notification ">
             <IoMdNotifications />
             <div className="notificationContent">
-              <div>
-                {" "}
-                <Link>One</Link>{" "}
-              </div>
-              <div>
-                {" "}
-                <Link>Two</Link>{" "}
-              </div>
-              <div>
-                {" "}
-                <Link>Three</Link>{" "}
-              </div>
-              <div>
-                {" "}
-                <Link>Four</Link>{" "}
-              </div>
+              {" "}
+              <Link>One</Link> <Link>Two</Link> <Link>Three</Link>{" "}
+              <Link>Four</Link>{" "}
             </div>
           </div>
 
-          <div className="icon  ">
+          <div className="icon userProfile ">
             <div className="userContainer">
               <FaUser size={15} />
             </div>

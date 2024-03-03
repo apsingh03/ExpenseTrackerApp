@@ -108,7 +108,7 @@
 
 }
 
-#homePage header .iconContainer div:nth-child(3) {
+#homePage header .iconContainer .icon:nth-child(3) {
   background-color: var(--bluebg);
   border-radius: 50%;
   height: 30px;
@@ -125,23 +125,48 @@
 
 #homePage header .notification {
   position: relative;
+  cursor: pointer;
+
+}
+
+#homePage header .notification:hover .notificationContent {
+  display: block;
 }
 
 #homePage header .notification .notificationContent {
   background-color: var(--bgColorlittleDark);
   position: absolute;
-  padding: 10px;
+  /* padding: 10px; */
   top: 40px;
   left: -100px;
   width: 150px;
+  z-index: 1;
+  box-shadow: 10px 10px 23px -6px rgb(47 44 216);
+  display: none;
 
 }
 
-
 #homePage header .notification .notificationContent a {
   padding: 10px 20px;
-  font-size: 20px;
   text-decoration: none;
+  width: 100%;
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+
+
+}
+
+#homePage header .notification .notificationContent>a:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+#homePage header .notification .notificationContent>a:hover {
+  background-color: var(--bluebg);
+
+
 }
 
 
@@ -191,7 +216,7 @@
   /* height: 100vh; */
   width: 94%;
   background-color: var(--bgColorDark);
-  margin-top: 85px;
+  margin-top: 80px;
 
 }
 
@@ -212,7 +237,7 @@
 
 
 /*
----------------  HOME PAGE CONTENT  
+---------------  DASHBOARD  
 */
 
 #homePage .cardContainer1 {
