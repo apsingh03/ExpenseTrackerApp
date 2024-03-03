@@ -4,6 +4,7 @@
 # --------- backend ------------------ 
 backend/node_modules
 backend/.env
+backend/steps.txt
 
 
 # ---------- REACT FRONTEND -----------
