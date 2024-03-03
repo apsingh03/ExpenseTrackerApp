@@ -16,7 +16,7 @@ const sequelize = new Sequelize(
 sequelize
   .authenticate()
   .then(() => {
-    console.log("sequelize connected");
+    // console.log("sequelize connected");
   })
   .catch((error) => {
     console.log("Sequelize Error ", error);
