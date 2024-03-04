@@ -2,16 +2,23 @@ import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
+import { useSelector, useDispatch } from "react-redux";
 
 import { FaFacebook, FaInstagramSquare, FaLinkedin } from "react-icons/fa";
+import { loginUserAsync } from "../redux/slice/SignInSlice";
 
 const Signin = () => {
+  const dispatch = useDispatch();
+
+  const signInRedux = useSelector((state) => state.signIn);
+
   const SignupSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email Required"),
 
     password: Yup.string()
       .min(2, "Too Short!")
-      .max(10, "Too Long!")
+      // .max(10, "Too Long!")
       .required("Password Required"),
   });
 
@@ -50,7 +57,16 @@ const Signin = () => {
             initialValues={{ email: "", password: "" }}
             validationSchema={SignupSchema}
             onSubmit={(values) => {
-              console.log(values);
+              // console.log(values);
+              dispatch(
+                loginUserAsync({
+                  email: values.email,
+                  password: values.password,
+                })
+              );
+
+              values.email = "";
+              values.password = "";
             }}
           >
             {({
@@ -110,7 +126,7 @@ const Signin = () => {
                   type="submit"
                   className="btn btn-md w-100 text-white mt-2 "
                   style={{ backgroundColor: "#2F2CD8" }}
-                  disabled={isSubmitting}
+                  // disabled={isSubmitting}
                 >
                   Sign In
                 </button>
@@ -118,7 +134,7 @@ const Signin = () => {
             )}
           </Formik>
 
-          <div className="mt-4 alreadyHaveAccount ">
+          <div className="mt-4 alreadyHaveAccount d-flex flex-row justify-content-between ">
             <p>
               {" "}
               Forgot Password ? <Link to="/forgotPassword">
@@ -126,6 +142,22 @@ const Signin = () => {
                 Click Here{" "}
               </Link>{" "}
             </p>
+
+            <div className="text-center" style={{ height: "25px" }}>
+              {signInRedux.isLoading === true ? (
+                <RotatingLines
+                  visible={true}
+                  height="25"
+                  width="25"
+                  color="blue"
+                  strokeWidth="5"
+                  animationDuration="0.75"
+                  ariaLabel="rotating-lines-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              ) : null}
+            </div>
           </div>
 
           <div className="mt-4 alreadyHaveAccount ">

@@ -37,7 +37,7 @@ const createUser = async (req, res) => {
 
         let query = await Users.create(data);
 
-        res.status(200).send(query);
+        res.status(200).send({ success: true, msg: "Sign Up Successful" });
       });
     }
   } catch (error) {
@@ -69,13 +69,13 @@ const loginUser = async (req, res) => {
           });
         } else {
           return res
-            .status(401)
+            .status(200)
             .send({ success: false, msg: "Password Wrong" });
         }
       }
     );
   } else {
-    res.status(404).send({ success: false, msg: "User Does Not Exist" });
+    res.status(200).send({ success: false, msg: "User Does Not Exist" });
   }
 };
 

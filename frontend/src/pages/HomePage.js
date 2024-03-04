@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route , Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 import Header from "../components/Header";
 // import Footer from "../components/Footer";
@@ -18,9 +18,8 @@ import LineChart from "../components/charts/LineChart";
 import PieChart from "../components/charts/PieChart";
 import Dashboard from "../components/Dashboard";
 
-import Expenses from "../components/Expenses"
+import Expenses from "../components/Expenses";
 import Budget from "../components/Budget";
-
 
 const HomePage = () => {
   return (
@@ -34,16 +33,32 @@ const HomePage = () => {
           <main className="belowRightSide p-5">
             {/* CODE HERE  */}
 
+            <div className="d-flex flex-row justify-content-between text-white">
+              <div>
+                <h4>Dashboard</h4>
+                <h6>Welcome Expense Management</h6>
+              </div>
+
+              <div className="breadcrumbs">
+                <Link to="/">Home</Link>
+                <span>
+                  {" "}
+                  <FaAngleRight />{" "}
+                </span>
+                <Link to={window.location.href.split("/")[3]}>
+                  {" "}
+                  {window.location.href.split("/")[3]}{" "}
+                </Link>
+              </div>
+            </div>
+
             <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/expenses" element={<Expenses />} />
-        <Route path="/budget" element={<Budget />} />
-       
-      </Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/expenses" element={<Expenses />} />
+              <Route path="/budget" element={<Budget />} />
+            </Routes>
 
-              {/* <Dashboard /> */}
-         
-
+            {/* <Dashboard /> */}
           </main>
         </section>
       </div>

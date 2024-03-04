@@ -5,12 +5,18 @@ import { IoMdNotifications } from "react-icons/io";
 import { MdDarkMode } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 // import { FaTachometerAlt, FaHome, FaRegUser, FaChartBar } from "react-icons/fa";
 // import { MdSupportAgent } from "react-icons/md";
 // import { IoLogoApple } from "react-icons/io";
 // import { FaCircleDollarToSlot } from "react-icons/fa6";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const signInRedux = useSelector((state) => state.signIn);
+
+  // console.log(signInRedux.loggedData.isUserLogged);
+
   return (
     <>
       <header className="d-flex flex-row justify-content-between  ">
@@ -22,13 +28,24 @@ const Header = () => {
           >
             Sign Up
           </Link>
-          <Link
-            to="/signin"
-            style={{ fontSize: "20px" }}
-            className="text-white text-decoration-underline "
-          >
-            Sign In
-          </Link>
+
+          { signInRedux.loggedDatais && signInRedux.loggedDatais.UserLogged === true ? (
+            <Link
+              to="#"
+              style={{ fontSize: "20px" }}
+              className="text-white text-decoration-underline "
+            >
+                  {signInRedux.loggedData.fullName}
+            </Link>
+          ) : (
+            <Link
+              to="/signin"
+              style={{ fontSize: "20px" }}
+              className="text-white text-decoration-underline "
+            >
+              Sign In
+            </Link>
+          )}
         </div>
 
         <div className="iconContainer d-flex flex-row justify-content-between ailign-items-center">

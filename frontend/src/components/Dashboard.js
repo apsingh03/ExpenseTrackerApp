@@ -13,28 +13,18 @@ import Header from "../components/Header";
 // import { FaCircleDollarToSlot } from "react-icons/fa6";
 import { FaAngleRight } from "react-icons/fa";
 
+import { useSelector, useDispatch } from "react-redux";
+
 import LineChart from "../components/charts/LineChart";
 import PieChart from "../components/charts/PieChart";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const signInRedux = useSelector((state) => state.signIn);
+
+  // console.log("dashboard ", signInRedux);
   return (
     <>
-      <div className="d-flex flex-row justify-content-between text-white">
-        <div>
-          <h4>Dashboard</h4>
-          <h6>Welcome Expense Management</h6>
-        </div>
-
-        <div className="breadcrumbs">
-          <Link to="#">Home</Link>
-          <span>
-            {" "}
-            <FaAngleRight />{" "}
-          </span>
-          <Link to="#">Dashboard</Link>
-        </div>
-      </div>
-
       <div className="row cardContainer1 ">
         <div className="col-12 col-md-4 col-lg-3">
           <div className="card">
