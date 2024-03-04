@@ -29,6 +29,7 @@ db.sequelize = sequelize;
 
 // table name
 db.users = require("./usersModel.js")(sequelize, DataTypes);
+db.category = require("./categoryModel.js")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("You are in Sync");

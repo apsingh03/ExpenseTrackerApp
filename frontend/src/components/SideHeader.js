@@ -11,6 +11,8 @@ import { FaTachometerAlt, FaHome, FaRegUser, FaChartBar } from "react-icons/fa";
 import { MdSupportAgent } from "react-icons/md";
 import { IoLogoApple } from "react-icons/io";
 import { FaCircleDollarToSlot } from "react-icons/fa6";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+
 // import SideHeader from "../components/SideHeader";
 
 const SideHeader = () => {
@@ -38,6 +40,17 @@ const SideHeader = () => {
               <span className="icon">
                 {" "}
                 <FaHome />{" "}
+              </span>{" "}
+            </Link>{" "}
+          </div>
+
+          <div title="Category">
+            {" "}
+            <Link to="/category">
+              {" "}
+              <span className="icon">
+                {" "}
+                <BiSolidCategoryAlt />{" "}
               </span>{" "}
             </Link>{" "}
           </div>

@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
+import Category from "./components/Category";
 
 function App() {
   return (
