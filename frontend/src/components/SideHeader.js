@@ -1,9 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-
 import { IoMdNotifications } from "react-icons/io";
 import { MdDarkMode } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
@@ -55,17 +51,6 @@ const SideHeader = () => {
             </Link>{" "}
           </div>
 
-          <div title="Budget">
-            {" "}
-            <Link to="/budget">
-              {" "}
-              <span className="icon">
-                {" "}
-                <FaTachometerAlt />{" "}
-              </span>{" "}
-            </Link>{" "}
-          </div>
-
           <div title="Expenses">
             {" "}
             <Link to="/expenses">
@@ -99,13 +84,13 @@ const SideHeader = () => {
             </Link>{" "}
           </div>
 
-          <div title="six">
+          <div title="Budget">
             {" "}
-            <Link to="#">
+            <Link to="/budget">
               {" "}
               <span className="icon">
                 {" "}
-                <MdSupportAgent />{" "}
+                <FaTachometerAlt />{" "}
               </span>{" "}
             </Link>{" "}
           </div>

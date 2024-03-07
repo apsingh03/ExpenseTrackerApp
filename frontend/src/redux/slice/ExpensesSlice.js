@@ -3,11 +3,11 @@ import axios from "axios";
 
 const HOSTNAME = "http://localhost:8000";
 
-export const getCategoryAsync = createAsyncThunk("category/get ", async () => {
+export const getExpensesAsync = createAsyncThunk("expenses/get ", async () => {
   try {
     // console.log("----> " ,  fullName , email , password  );
     const token = localStorage.getItem("loggedDataToken");
-    const response = await axios.get(`${HOSTNAME}/category/getCategory/`, {
+    const response = await axios.get(`${HOSTNAME}/expense/getExpenses/`, {
       headers: { Authorization: `${token}` },
     });
 
@@ -17,17 +17,22 @@ export const getCategoryAsync = createAsyncThunk("category/get ", async () => {
   }
 });
 
-export const createCategoryAsync = createAsyncThunk(
-  "category/create",
-  async ({ catName, budget }) => {
+export const createExpensesAsync = createAsyncThunk(
+  "expenses/createExpense",
+  async ({ money, description, cat_id }) => {
     try {
+      const token = localStorage.getItem("loggedDataToken");
       // console.log("----> " ,  fullName , email , password  );
       const response = await axios.post(
-        `${HOSTNAME}/category/createCategory/`,
+        `${HOSTNAME}/expense/createExpense/`,
+
         {
-          catName: catName,
-          budget: budget,
-        }
+          money: money,
+          description: description,
+          cat_id: cat_id,
+        },
+
+        { headers: { Authorization: `${token}` } }
       );
 
       return response.data;
@@ -37,12 +42,15 @@ export const createCategoryAsync = createAsyncThunk(
   }
 );
 
-export const deleteCategoryAsync = createAsyncThunk(
-  "category/delete",
+export const deleteExpensesAsync = createAsyncThunk(
+  "expenses/delete",
   async ({ id }) => {
     try {
       // console.log("----> " ,  fullName , email , password  );
-      const response = await axios.delete(`${HOSTNAME}/category/delete/${id}`);
+      const token = localStorage.getItem("loggedDataToken");
+      const response = await axios.delete(`${HOSTNAME}/expense/delete/${id}`, {
+        headers: { Authorization: `${token}` },
+      });
       // console.log( response )
       return response.data;
     } catch (error) {
@@ -57,69 +65,71 @@ const initialState = {
   isError: false,
 };
 
-export const categorySlice = createSlice({
-  name: "category",
+export const expensesSlice = createSlice({
+  name: "expenses",
   initialState,
   reducers: {},
 
   extraReducers: (builder) => {
     builder
-      .addCase(getCategoryAsync.pending, (state, action) => {
+      .addCase(getExpensesAsync.pending, (state, action) => {
         state.isLoading = true;
       })
 
-      .addCase(getCategoryAsync.fulfilled, (state, action) => {
+      .addCase(getExpensesAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload;
       })
 
-      .addCase(getCategoryAsync.rejected, (state, action) => {
+      .addCase(getExpensesAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       })
 
-      .addCase(createCategoryAsync.pending, (state, action) => {
+      .addCase(createExpensesAsync.pending, (state, action) => {
         state.isLoading = true;
       })
 
-      .addCase(createCategoryAsync.fulfilled, (state, action) => {
+      .addCase(createExpensesAsync.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        // console.log("payload - " , action.payload )
-        if (
-          action.payload.msg === "Category Name Already Exist" &&
-          action.payload.success === false
-        ) {
-          alert(action.payload.msg);
-        }
+        // console.log("payload - ", action.payload);
 
         if (
-          action.payload.msg === "Category Added" &&
+          action.payload.msg === "Category Budget is over" &&
           action.payload.success === true
         ) {
           alert(action.payload.msg);
-          // console.log( "payload - " ,  action.payload )
-          state.data.unshift(action.payload.category);
+        }
+
+        if (
+          action.payload.msg === "Expenses Added" &&
+          action.payload.success === true
+        ) {
+          alert(action.payload.msg);
+          state.data.unshift(action.payload.expenses);
         }
       })
 
-      .addCase(createCategoryAsync.rejected, (state, action) => {
+      .addCase(createExpensesAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       })
 
-      .addCase(deleteCategoryAsync.pending, (state, action) => {
+      .addCase(deleteExpensesAsync.pending, (state, action) => {
         state.isLoading = true;
       })
 
-      .addCase(deleteCategoryAsync.fulfilled, (state, action) => {
+      .addCase(deleteExpensesAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         // state.data = action.payload;
         const { id } = action.meta.arg;
 
+        // console.log("slice delete - " , id );
+
         if (
-          action.payload.success === true &&
-          action.payload.msg === "Category Deleted"
+          action.payload.msg === "Expense Deleted" &&
+          action.payload.success === true
         ) {
           alert(action.payload.msg);
         }
@@ -131,11 +141,11 @@ export const categorySlice = createSlice({
         state.data.splice(findIndex, 1);
       })
 
-      .addCase(deleteCategoryAsync.rejected, (state, action) => {
+      .addCase(deleteExpensesAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });
   },
 });
 
-export default categorySlice.reducer;
+export default expensesSlice.reducer;

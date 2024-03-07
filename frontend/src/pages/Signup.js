@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import { FaFacebook, FaInstagramSquare, FaLinkedin } from "react-icons/fa";
 import { createUserAsync, getAllUsersAsync } from "../redux/slice/UsersSlice";
 import { RotatingLines } from "react-loader-spinner";
@@ -10,7 +10,7 @@ import { RotatingLines } from "react-loader-spinner";
 const Signup = () => {
   const dispatch = useDispatch();
 
-  const usersRedux = useSelector( (state) => state.users );
+  const usersRedux = useSelector((state) => state.users);
 
   const SignupSchema = Yup.object().shape({
     fullName: Yup.string()
@@ -28,11 +28,8 @@ const Signup = () => {
   // console.log( getAllUsersRedux )
 
   useEffect(() => {
-    
-dispatch( getAllUsersAsync() )
-
-  }, [])
-  
+    dispatch(getAllUsersAsync());
+  }, []);
 
   return (
     <div id="signup">
@@ -71,16 +68,17 @@ dispatch( getAllUsersAsync() )
             onSubmit={(values) => {
               // console.log(values);
 
-              dispatch( createUserAsync({
-                fullName : values.fullName,
-                email : values.email,
-                password : values.password,
-              }) )
+              dispatch(
+                createUserAsync({
+                  fullName: values.fullName,
+                  email: values.email,
+                  password: values.password,
+                })
+              );
 
               values.fullName = "";
-              values.email = ""
-              values.password = ""
-
+              values.email = "";
+              values.password = "";
             }}
           >
             {({
@@ -177,21 +175,20 @@ dispatch( getAllUsersAsync() )
             </p>
 
             <div className="text-center" style={{ height: "25px" }}>
-        {usersRedux.isLoading === true ? (
-          <RotatingLines
-            visible={true}
-            height="25"
-            width="25"
-            color="blue"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        ) : null}
-      </div>
-
+              {usersRedux.isLoading === true ? (
+                <RotatingLines
+                  visible={true}
+                  height="25"
+                  width="25"
+                  color="blue"
+                  strokeWidth="5"
+                  animationDuration="0.75"
+                  ariaLabel="rotating-lines-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              ) : null}
+            </div>
           </div>
         </div>
       </div>

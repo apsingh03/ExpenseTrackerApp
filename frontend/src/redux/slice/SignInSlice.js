@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const HOSTNAME = "http://localhost:8000";
 
@@ -26,24 +27,20 @@ const initialState = {
   isError: false,
   loggedData: {
     isUserLogged:
-      localStorage.getItem("loggedData") !== null
-        ? JSON.parse(localStorage.getItem("loggedData")).isUserLogged
+      localStorage.getItem("loggedDataToken") !== null
+        ? jwtDecode(localStorage.getItem("loggedDataToken")).isUserLogged
         : null,
     id:
-      localStorage.getItem("loggedData") !== null
-        ? JSON.parse(localStorage.getItem("loggedData")).id
+      localStorage.getItem("loggedDataToken") !== null
+        ? jwtDecode(localStorage.getItem("loggedDataToken")).id
         : null,
     fullName:
-      localStorage.getItem("loggedData") !== null
-        ? JSON.parse(localStorage.getItem("loggedData")).fullName
+      localStorage.getItem("loggedDataToken") !== null
+        ? jwtDecode(localStorage.getItem("loggedDataToken")).fullName
         : null,
     email:
-      localStorage.getItem("loggedData") !== null
-        ? JSON.parse(localStorage.getItem("loggedData")).email
-        : null,
-    createdAt:
-      localStorage.getItem("loggedData") !== null
-        ? JSON.parse(localStorage.getItem("loggedData")).createdAt
+      localStorage.getItem("loggedDataToken") !== null
+        ? jwtDecode(localStorage.getItem("loggedDataToken")).email
         : null,
   },
 };
@@ -68,17 +65,8 @@ export const signinSlice = createSlice({
           action.payload.success === true
         ) {
           alert(action.payload.msg);
-          // console.log(action.payload.user);
 
-          let loggedData = {
-            isUserLogged: true,
-            id: action.payload.user.id,
-            fullName: action.payload.user.fullName,
-            email: action.payload.user.email,
-            createdAt: action.payload.user.createdAt,
-          };
-
-          localStorage.setItem("loggedData", JSON.stringify(loggedData));
+          localStorage.setItem("loggedDataToken", action.payload.token);
           window.location.replace("/");
         }
 

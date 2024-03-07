@@ -78,7 +78,7 @@ export const usersSlice = createSlice({
           alert(action.payload.msg);
         }
 
-        state.data.push( action.payload.category )
+        state.data.push(action.payload.category);
         // console.log("payload - ", action.payload )
       })
 

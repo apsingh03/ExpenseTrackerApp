@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
 
 const db = require("../model");
 
@@ -61,11 +62,22 @@ const loginUser = async (req, res) => {
             .send({ success: false, msg: "Something went wrong" });
         }
 
+        const userObject = {
+          isUserLogged: true,
+          id: currentUser.id,
+          fullName: currentUser.fullName,
+          email: currentUser.email,
+        };
+
+        var token = jwt.sign(userObject, "itsASecretKey");
+
+        // console.log( "token - "  , token )
+
         if (result === true) {
           res.status(200).send({
             success: true,
             msg: "Logged In Successfully",
-            user: currentUser,
+            token: token,
           });
         } else {
           return res

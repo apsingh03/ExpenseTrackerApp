@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 // import { MdSupportAgent } from "react-icons/md";
 // import { IoLogoApple } from "react-icons/io";
 // import { FaCircleDollarToSlot } from "react-icons/fa6";
+import { IoLogOut } from "react-icons/io5";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -29,13 +30,15 @@ const Header = () => {
             Sign Up
           </Link>
 
-          { signInRedux.loggedDatais && signInRedux.loggedDatais.UserLogged === true ? (
+          {signInRedux.loggedData &&
+          signInRedux.loggedData.isUserLogged === true ? (
             <Link
               to="#"
               style={{ fontSize: "20px" }}
               className="text-white text-decoration-underline "
             >
-                  {signInRedux.loggedData.fullName}
+              {signInRedux.loggedData.fullName} {" , "}{" "}
+              {signInRedux.loggedData.email}
             </Link>
           ) : (
             <Link
@@ -49,8 +52,16 @@ const Header = () => {
         </div>
 
         <div className="iconContainer d-flex flex-row justify-content-between ailign-items-center">
-          <div className="icon ">
-            <MdDarkMode />
+          <div
+            className="icon "
+            title="Logout"
+            style={{ cursor: "pointer" }}
+            onClick={() => [
+              localStorage.removeItem("loggedDataToken"),
+              window.location.reload(),
+            ]}
+          >
+            <IoLogOut />
           </div>
 
           <div className="icon notification ">

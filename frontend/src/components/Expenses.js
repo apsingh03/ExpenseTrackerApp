@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
 import { RotatingLines } from "react-loader-spinner";
@@ -11,10 +11,20 @@ import {
   deleteCategoryAsync,
   getCategoryAsync,
 } from "../redux/slice/CategorySlice";
+import {
+  createExpensesAsync,
+  deleteExpensesAsync,
+  getExpensesAsync,
+} from "../redux/slice/ExpensesSlice";
+// import {Date} from ""
 
 const Expenses = () => {
   const dispatch = useDispatch();
   const categoryRedux = useSelector((state) => state.category);
+  const expensesRedux = useSelector((state) => state.expenses);
+  const signinRedux = useSelector((state) => state.signIn);
+
+  // console.log( signinRedux.loggedData.id )
 
   // console.log( categoryRedux )
 
@@ -31,6 +41,7 @@ const Expenses = () => {
 
   useEffect(() => {
     dispatch(getCategoryAsync());
+    dispatch(getExpensesAsync());
   }, []);
 
   return (
@@ -56,16 +67,19 @@ const Expenses = () => {
             initialValues={{ catId: "", money: "", description: "" }}
             validationSchema={categorySchema}
             onSubmit={(values) => {
-              console.log(values);
-              // dispatch(
-              //   createCategoryAsync({
-              //     catName: values.catName,
-              //     budget: values.budget,
-              //   })
-              // );
+              // console.log(values);
 
-              // values.catName = "";
-              // values.budget = "";
+              dispatch(
+                createExpensesAsync({
+                  money: values.money,
+                  description: values.description,
+                  cat_id: values.catId,
+                })
+              );
+
+              values.catId = "";
+              values.money = "";
+              values.description = "";
             }}
           >
             {({
@@ -83,27 +97,46 @@ const Expenses = () => {
                   <div className="col-4 mt-2">
                     <div className="form-group">
                       <label
-                        htmlFor="selectCategory"
+                        htmlFor="catId"
                         className="text-dark"
                         style={{ fontWeight: "bold" }}
                       >
                         Select Budget Category
                       </label>
+
+                      {/* <Field 
+                      name="catId"
+                      as="select"
+
+                      >
+
+{categoryRedux.data &&
+                          categoryRedux.data.map((data) => {
+                            return (
+                              <option key={data.id} value={data.id}>
+                                {" "}
+                                {data.catName} - Total Budget &#x20B9;{data.budget}{" "}
+                              </option>
+                            );
+                          })}
+
+                      </Field> */}
+
                       <select
                         className="form-control"
-                        id="selectCategory"
+                        id="catId"
+                        name="catId"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.catId}
                       >
-                        {/* <option> Select </option> */}
-
                         {categoryRedux.data &&
                           categoryRedux.data.map((data) => {
                             return (
                               <option key={data.id} value={data.id}>
                                 {" "}
-                                {data.catName} - &#x20B9; {data.budget}{" "}
+                                {data.catName} - Total Budget &#x20B9;
+                                {data.budget}{" "}
                               </option>
                             );
                           })}
@@ -153,7 +186,8 @@ const Expenses = () => {
 
                   <div className="col-2 mt-4">
                     <div className="text-center">
-                      {categoryRedux.isLoading === true ? (
+                      {expensesRedux.isLoading ||
+                      categoryRedux.isLoading === true ? (
                         <RotatingLines
                           visible={true}
                           height="50"
@@ -204,14 +238,44 @@ const Expenses = () => {
       <div className="mt-3 ">
         <table className="table table-striped table-hover  ">
           <thead>
-            <tr>
+            <tr className="text-center">
               <th scope="col">S.No</th>
               <th scope="col">Category Name</th>
-              <th scope="col">Total Expense Budget</th>
+              <th scope="col">Category Budget</th>
+              <th scope="col">Money</th>
+
+              <th scope="col">Description</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            {expensesRedux.data &&
+              expensesRedux.data.map((data, index) => {
+                return (
+                  <tr key={index} className="text-center">
+                    <th> {index + 1} </th>
+                    <td>{data.category && data.category.catName}</td>
+                    <td className="text-success fw-bold ">
+                      {data.category && data.category.budget}
+                    </td>
+                    <td className="text-danger fw-bold">{data.money}</td>
+
+                    <td>{data.description.substring(0, 30) + "..."}</td>
+
+                    <td>
+                      <button
+                        className="btn btn-danger btn-md"
+                        onClick={() =>
+                          dispatch(deleteExpensesAsync({ id: data.id }))
+                        }
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
         </table>
       </div>
     </>
