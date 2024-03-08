@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     isPremiumuser: {
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   });
 

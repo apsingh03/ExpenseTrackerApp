@@ -11,6 +11,11 @@ const getRequest = async (req, res) => {
   res.status(200).send(query);
 };
 
+const getRequestByUserId = async (req, res) => {
+  let query = await Users.findAll({ where: { id: req.params.userId } });
+  res.status(200).send(query);
+};
+
 const createUser = async (req, res) => {
   try {
     let emailExistQuery = await Users.findAll({
@@ -67,6 +72,7 @@ const loginUser = async (req, res) => {
           id: currentUser.id,
           fullName: currentUser.fullName,
           email: currentUser.email,
+          isPremiumuser: currentUser.isPremiumuser,
         };
 
         var token = jwt.sign(userObject, "itsASecretKey");
@@ -95,4 +101,5 @@ module.exports = {
   getRequest,
   createUser,
   loginUser,
+  getRequestByUserId,
 };

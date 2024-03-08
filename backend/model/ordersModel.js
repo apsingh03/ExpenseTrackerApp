@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     //   allowNull: false,
     //   primaryKey: true,
     // },
+
     paymentid: DataTypes.STRING,
     orderid: DataTypes.STRING,
     status: DataTypes.STRING,

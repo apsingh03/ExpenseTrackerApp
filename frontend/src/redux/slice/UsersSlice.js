@@ -12,6 +12,18 @@ export const getAllUsersAsync = createAsyncThunk("users/getUsers", async () => {
   }
 });
 
+export const getUserByUserIdAsync = createAsyncThunk(
+  "users/getUsersById",
+  async ({ userId }) => {
+    try {
+      const response = await axios.get(`${HOSTNAME}/users/getUsers/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.log("Error  ", error);
+    }
+  }
+);
+
 export const createUserAsync = createAsyncThunk(
   "users/createUser",
   async ({ fullName, email, password }) => {
@@ -53,6 +65,19 @@ export const usersSlice = createSlice({
       })
 
       .addCase(getAllUsersAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+      .addCase(getUserByUserIdAsync.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(getUserByUserIdAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload;
+      })
+
+      .addCase(getUserByUserIdAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       })

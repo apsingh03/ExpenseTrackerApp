@@ -5,112 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 
 import LineChart from "../components/charts/LineChart";
 import PieChart from "../components/charts/PieChart";
-import axios from "axios";
+
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const signInRedux = useSelector((state) => state.signIn);
 
-  function loadScript(src) {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-      document.body.appendChild(script);
-    });
-  }
-
-  async function displayRazorpay() {
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-
-    if (!res) {
-      alert("Razropay failed to load!!");
-      return;
-    }
-
-    const HOSTNAME = "http://localhost:8000";
-    const token = localStorage.getItem("loggedDataToken");
-
-    const response = await axios.get(
-      `${HOSTNAME}/purchase/premiummembership/`,
-      {
-        headers: { Authorization: `${token}` },
-      }
-    );
-
-    const { order } = response.data;
-
-    const options = {
-      key: "rzp_test_AxRtLSqfBaLNEC", // Enter the Key ID generated from the Dashboard
-      amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      currency: order.currency,
-      name: "Expense Tracker APP",
-      description: "Test Transaction",
-      image: "https://example.com/your_logo",
-      order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-
-      // callback_url:`${HOSTNAME}/purchase/updatetransationstatus/`,
-
-      // this handler func will handle the success payment
-      handler: async function (response) {
-        await axios.post(
-          `${HOSTNAME}/purchase/updatetransationstatus/`,
-          {
-            order_id: options.order_id,
-            payment_id: response.razorpay_payment_id,
-            paymentStatus: "SUCCESSFUL",
-          },
-
-          {
-            headers: { Authorization: `${token}` },
-          }
-        );
-
-        alert("You are a Premium User Now");
-      },
-
-      prefill: {
-        name: signInRedux.loggedData.fullName,
-        email: signInRedux.loggedData.email,
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-
-    paymentObject.on("payment.failed", async function (response) {
-      const token = localStorage.getItem("loggedDataToken");
-
-      const responseFailed = await axios.post(
-        `${HOSTNAME}/purchase/updatetransationstatus/`,
-        {
-          order_id: options.order_id,
-          payment_id: "",
-          paymentStatus: "FAILED",
-        },
-
-        {
-          headers: { Authorization: `${token}` },
-        }
-      );
-
-      console.log(response);
-      alert("Payment Failed something went wrong");
-    });
-  }
+  // console.log( "Dashboard - ",  signInRedux )
 
   return (
     <>
@@ -159,14 +60,14 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <button
+      {/* <button
         id="rzp-button1"
         onClick={displayRazorpay}
         className="btn btn-primary btn-lg mx-5"
       >
         {" "}
         BUY PREMIUM{" "}
-      </button>
+      </button> */}
 
       <div className="row cardContainer2">
         <div className="col-12 col-md-6 col-lg-9">
