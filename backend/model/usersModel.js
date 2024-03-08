@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    isPremiumuser: {
+      type: DataTypes.BOOLEAN,
+    },
   });
 
   return Users;

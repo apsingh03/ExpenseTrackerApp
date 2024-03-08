@@ -31,6 +31,7 @@ db.sequelize = sequelize;
 db.users = require("./usersModel.js")(sequelize, DataTypes);
 db.category = require("./categoryModel.js")(sequelize, DataTypes);
 db.expenses = require("./expensesModel.js")(sequelize, DataTypes);
+db.orders = require("./ordersModel.js")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("You are in Sync");
@@ -53,6 +54,17 @@ db.category.hasMany(db.expenses, {
 });
 db.expenses.belongsTo(db.category, {
   foreignKey: "cat_id",
+  // as: "categoryID",
+});
+
+// users -> Foreign Key order
+db.users.hasMany(db.orders, {
+  foreignKey: "user_id",
+  // as: "expenses",
+});
+
+db.orders.belongsTo(db.users, {
+  foreignKey: "user_id",
   // as: "categoryID",
 });
 

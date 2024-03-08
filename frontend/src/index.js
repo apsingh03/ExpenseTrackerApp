@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { store } from "./redux/Store";
 import { Provider } from "react-redux";
+// import "./js/PaymentGateway"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
