@@ -68,4 +68,4 @@ db.orders.belongsTo(db.users, {
   // as: "categoryID",
 });
 
-module.exports = db;
+module.exports =  db
