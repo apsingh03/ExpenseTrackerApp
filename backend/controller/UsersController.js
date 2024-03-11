@@ -1,10 +1,12 @@
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-
 const db = require("../model");
+const uuid = require("uuid");
+const sgMail = require("@sendgrid/mail");
 
 // models
 const Users = db.users;
+const ForgotPassword = db.forgotpassword;
 
 const getRequest = async (req, res) => {
   let query = await Users.findAll({});
@@ -97,9 +99,26 @@ const loginUser = async (req, res) => {
   }
 };
 
+const forgotPasswordd = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    let findEmailQuery = await Users.findOne({ where: { email } });
+
+    if (findEmailQuery) {
+      const id = uuid.v4();
+    } else {
+      res.status(500).send({ msg: "User Doesn't Exsist" });
+    }
+  } catch (error) {
+    res.status(500).send({ error });
+  }
+};
+
 module.exports = {
   getRequest,
   createUser,
   loginUser,
   getRequestByUserId,
+  forgotPasswordd,
 };

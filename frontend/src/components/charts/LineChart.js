@@ -7,41 +7,41 @@ Chart.register(...registerables);
 const LineChart = ({ apiData, filteredData }) => {
   let uniqueDates;
 
-//   apiData &&
-//     apiData.map((data) => {
-//       // console.log(data.Day)
+  apiData &&
+    apiData.map((data) => {
+      // console.log(data.Day)
 
-//       uniqueDates = new Set();
-//       uniqueDates.add(data.Day);
-//     });
+      uniqueDates = new Set();
+      uniqueDates.add(data.Day);
+    });
 
   const state = {
-    labels: [
-     "28-Aug" , "29-Aug" , "30-Aug" , "31-Aug" , "01-Sep" , "02-Sep", "03-Sep" ,
-    ],
+    // labels: [
+    //  "28-Aug" , "29-Aug" , "30-Aug" , "31-Aug" , "01-Sep" , "02-Sep", "03-Sep" ,
+    // ],
 
-    // labels: filteredData.map((data) => {
-    //   let unique = [];
+    labels: filteredData.map((data) => {
+      let unique = [];
 
-    //   if (!unique.includes(data.Day.substring(0, 10))) {
-    //     unique.push(data.Day.substring(0, 10));
-    //   }
+      if (!unique.includes(data.Day.substring(0, 10))) {
+        unique.push(data.Day.substring(0, 10));
+      }
 
-    //   return unique;
-    // }),
+      return unique;
+    }),
 
     datasets: [
       {
         label: "",
-        backgroundColor: ["#2F2CD8"],
+        backgroundColor: ["blue"],
         fill: false,
         lineTension: 0.5,
-        borderColor: "white",
+        borderColor: "blue",
         borderWidth: 2,
-        data: [14 , 10 , 7 , 18 , 7, 14 , 5],
-        // data: filteredData.map((data) => {
-        //   return data.A;
-        // }),
+        // data: [14 , 10 , 7 , 18 , 7, 14 , 5],
+        data: filteredData.map((data) => {
+          return data.A;
+        }),
       },
     ],
   };
@@ -53,7 +53,7 @@ const LineChart = ({ apiData, filteredData }) => {
         options={{
           title: {
             display: true,
-            text: "Expense Graph",
+            text: "Class Strength",
             fontSize: 20,
           },
           legend: {

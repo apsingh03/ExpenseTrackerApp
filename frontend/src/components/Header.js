@@ -17,7 +17,7 @@ const Header = () => {
   // console.log("usersRedux - ", usersRedux.data[0]);
 
   useEffect(() => {
-    // dispatch(getUserByUserIdAsync({ userId: signInRedux.loggedData.id }));
+    dispatch(getUserByUserIdAsync({ userId: signInRedux.loggedData.id }));
   }, [dispatch]);
 
   function loadScript(src) {
@@ -160,7 +160,7 @@ const Header = () => {
           {signInRedux.loggedData &&
           signInRedux.loggedData.isUserLogged === true ? (
             <>
-              { usersRedux.data[0] &&
+              {usersRedux.data[0] &&
               usersRedux.data[0].isPremiumuser === true ? (
                 <p
                   to="#"
@@ -171,7 +171,7 @@ const Header = () => {
                 </p>
               ) : null}
 
-              { usersRedux.data[0] &&
+              {usersRedux.data[0] &&
               usersRedux.data[0].isPremiumuser === false ? (
                 <Link
                   to="#"
@@ -187,22 +187,20 @@ const Header = () => {
         </div>
 
         <div className="iconContainer d-flex flex-row justify-content-between ailign-items-center">
-          
-          {
-            signInRedux.loggedData &&
-            signInRedux.loggedData.isUserLogged === true ?  <div
-            className="icon "
-            title="Logout"
-            style={{ cursor: "pointer" }}
-            onClick={() => [
-              localStorage.removeItem("loggedDataToken"),
-              window.location.reload(),
-            ]}
-          >
-            <IoLogOut />
-          </div> : null
-          }
-         
+          {signInRedux.loggedData &&
+          signInRedux.loggedData.isUserLogged === true ? (
+            <div
+              className="icon "
+              title="Logout"
+              style={{ cursor: "pointer" }}
+              onClick={() => [
+                localStorage.removeItem("loggedDataToken"),
+                window.location.reload(),
+              ]}
+            >
+              <IoLogOut />
+            </div>
+          ) : null}
 
           <div className="icon notification ">
             <IoMdNotifications />

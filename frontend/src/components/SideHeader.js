@@ -62,20 +62,9 @@ const SideHeader = () => {
             </Link>{" "}
           </div>
 
-          <div title="four">
+          <div title="Charts Data">
             {" "}
-            <Link to="#">
-              {" "}
-              <span className="icon">
-                {" "}
-                <FaRegUser />{" "}
-              </span>{" "}
-            </Link>{" "}
-          </div>
-
-          <div title="five">
-            {" "}
-            <Link to="#">
+            <Link to="/chartData">
               {" "}
               <span className="icon">
                 {" "}
@@ -84,16 +73,16 @@ const SideHeader = () => {
             </Link>{" "}
           </div>
 
-          <div title="Budget">
+          {/* <div title="four">
             {" "}
-            <Link to="/budget">
+            <Link to="#">
               {" "}
               <span className="icon">
                 {" "}
-                <FaTachometerAlt />{" "}
+                <FaRegUser />{" "}
               </span>{" "}
             </Link>{" "}
-          </div>
+          </div> */}
         </nav>
       </main>
     </>

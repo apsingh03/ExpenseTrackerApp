@@ -34,7 +34,8 @@ const initialState = {
       localStorage.getItem("loggedDataToken") !== null
         ? jwtDecode(localStorage.getItem("loggedDataToken")).id
         : null,
-    isPremiumuser : localStorage.getItem("loggedDataToken") !== null
+    isPremiumuser:
+      localStorage.getItem("loggedDataToken") !== null
         ? jwtDecode(localStorage.getItem("loggedDataToken")).isPremiumuser
         : null,
     fullName:

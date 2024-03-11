@@ -1,9 +1,11 @@
 const db = require("../model");
+const AWS = require("aws-sdk");
 
 const Expenses = db.expenses;
 const Category = db.category;
 const Users = db.users;
 const sequelize = db.sequelize;
+const fileDownload = db.fileDownload;
 
 // const
 const getExpenses = async (req, res) => {
@@ -117,7 +119,6 @@ const deleteExpense = async (req, res) => {
     );
 
     // console.log( "expense - " , expenseDetails.money , " final  " ,  differenceOfTotalExpenses  )
-
     // console.log("delete userId - ", req.user.id);
     // console.log("delete expenseId - ", expenseId);
 
@@ -137,8 +138,82 @@ const deleteExpense = async (req, res) => {
   }
 };
 
+const uploadToS3 = async (stringifiedExpenses, fileName) => {
+  try {
+    const BUCKET_NAME = "expenserackerplatform";
+    const IAM_USER_KEY = "AKIA47CRWUTHMXXTGNHC";
+    const IAM_USER_SECRET = "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";
+
+    let s3Bucket = new AWS.S3({
+      accessKeyId: IAM_USER_KEY,
+      secretAccessKey: IAM_USER_SECRET,
+      // Bucket : BUCKET_NAME
+    });
+
+    // we already have bucket
+    // s3Bucket.createBucket( () => {
+
+    var params = {
+      Bucket: BUCKET_NAME,
+      Key: fileName,
+      Body: stringifiedExpenses,
+      ACL: "public-read",
+    };
+
+    return new Promise((resolve, reject) => {
+      s3Bucket.upload(params, (err, s3response) => {
+        if (err) {
+          console.log(`somethong went wrong  -- \n`, err);
+          reject(err);
+          // throw new Error(err);
+        } else {
+          // console.log(`success `, s3response);
+          resolve(s3response.Location);
+        }
+      });
+    });
+
+    // } )
+  } catch (error) {
+    // return error;
+  }
+};
+
+const downloadExpenseFile = async (req, res) => {
+  const t = await sequelize.transaction();
+  try {
+    let query = await req.user.getExpenses();
+    const stringifiedExpenses = JSON.stringify(query);
+    const fileName = `expense${req.user.id}/${new Date()}/.txt`;
+    const fileUrl = await uploadToS3(stringifiedExpenses, fileName);
+
+    await fileDownload.create(
+      { url: fileUrl, user_id: req.user.id },
+      { transaction: t }
+    );
+    await t.commit();
+    res.status(200).json({ success: true, fileUrl });
+  } catch (error) {
+    console.log(error);
+    await t.rollback();
+    res.status(500).json({ success: false, fileUrl: "" });
+  }
+};
+
+const getDownloadHistory = async (req, res) => {
+  if (req.user.id === null) {
+    let query = await fileDownload.findAll();
+    res.status(200).json(query);
+  } else {
+    let query = await fileDownload.findAll({ user_id: req.user.id });
+    res.status(200).json(query);
+  }
+};
+
 module.exports = {
   getExpenses,
   createExpense,
   deleteExpense,
+  downloadExpenseFile,
+  getDownloadHistory,
 };

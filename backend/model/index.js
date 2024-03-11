@@ -32,6 +32,8 @@ db.users = require("./usersModel.js")(sequelize, DataTypes);
 db.category = require("./categoryModel.js")(sequelize, DataTypes);
 db.expenses = require("./expensesModel.js")(sequelize, DataTypes);
 db.orders = require("./ordersModel.js")(sequelize, DataTypes);
+db.forgotpassword = require("./forgotPassword.js")(sequelize, DataTypes);
+db.fileDownload = require("./FileDownloadModel.js")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("You are in Sync");
@@ -68,4 +70,12 @@ db.orders.belongsTo(db.users, {
   // as: "categoryID",
 });
 
-module.exports =  db
+db.users.hasMany(db.fileDownload, {
+  foreignKey: "user_id",
+});
+
+db.fileDownload.belongsTo(db.users, {
+  foreignKey: "user_id",
+});
+
+module.exports = db;

@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 
     totalExpense: {
       type: DataTypes.INTEGER,
-      defaultValue : 0,
+      defaultValue: 0,
     },
   });
 
