@@ -140,9 +140,9 @@ const deleteExpense = async (req, res) => {
 
 const uploadToS3 = async (stringifiedExpenses, fileName) => {
   try {
-    const BUCKET_NAME = "expenserackerplatform";
-    const IAM_USER_KEY = "AKIA47CRWUTHMXXTGNHC";
-    const IAM_USER_SECRET = "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";
+    const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+    const IAM_USER_KEY = process.env.AWS_IAM_USER_KEY;
+    const IAM_USER_SECRET = process.env.AWS_IAM_USER_SECRET;
 
     let s3Bucket = new AWS.S3({
       accessKeyId: IAM_USER_KEY,

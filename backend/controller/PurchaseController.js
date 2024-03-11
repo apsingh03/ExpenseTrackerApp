@@ -7,8 +7,8 @@ const Order = db.orders;
 const purchasepremium = async (req, res) => {
   try {
     let rzp = new Razorpay({
-      key_id: "rzp_test_AxRtLSqfBaLNEC",
-      key_secret: "0rphqWLqFIOsbiLBYVxWukBx",
+      key_id: process.env.RAZOR_KEY_ID,
+      key_secret: process.env.RAZOR_KEY_SECRET,
     });
 
     const amount = 399;
