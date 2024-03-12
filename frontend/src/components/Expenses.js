@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -24,10 +24,6 @@ const Expenses = () => {
   const expensesRedux = useSelector((state) => state.expenses);
   const signinRedux = useSelector((state) => state.signIn);
 
-  // console.log( signinRedux.loggedData.id )
-
-  // console.log( categoryRedux )
-
   const categorySchema = Yup.object().shape({
     catId: Yup.string().required("Please Select"),
 
@@ -39,10 +35,43 @@ const Expenses = () => {
     money: Yup.number().min(10, "Greater than 10").required("Money  Required"),
   });
 
+  const totalPagesRedux = expensesRedux.data?.totalPages;
+  const paginationArray = Array.from(Array(totalPagesRedux).keys()).splice(1);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [pageSize, setpageSize] = useState(5);
+
+  function loadTotalPagesFromExpenses() {
+    if (expensesRedux.isLoading !== true) {
+      setTotalPages(expensesRedux.data?.totalPages);
+    }
+  }
+  
   useEffect(() => {
     dispatch(getCategoryAsync());
-    dispatch(getExpensesAsync());
-  }, []);
+    dispatch(
+      getExpensesAsync({
+        currentPage,
+        pageSize,
+      })
+    );
+
+    loadTotalPagesFromExpenses();
+  }, [currentPage, pageSize, totalPagesRedux]);
+
+  function nextPage() {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  function prevPage() {
+    console.log("prev page");
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
 
   return (
     <>
@@ -249,12 +278,15 @@ const Expenses = () => {
             </tr>
           </thead>
           <tbody>
-            {expensesRedux.data &&
-              expensesRedux.data.map((data, index) => {
+            {expensesRedux.data.expenses &&
+              expensesRedux.data.expenses.map((data, index) => {
                 return (
                   <tr key={index} className="text-center">
                     <th> {index + 1} </th>
-                    <td>{data.category && data.category.catName}</td>
+                    <td>
+                      {" "}
+                      {data?.id} {data.category && data.category.catName}
+                    </td>
                     <td className="text-success fw-bold ">
                       {data.category && data.category.budget}
                     </td>
@@ -277,6 +309,62 @@ const Expenses = () => {
               })}
           </tbody>
         </table>
+
+        <div className="bg-white py-3 d-flex flex-row justify-content-evenly align-items-baseline ">
+          <nav aria-label="Page navigation">
+            <ul className="pagination justify-content-center  ">
+              <li className="page-item">
+                <button
+                  className="page-link bg-dark text-white"
+                  onClick={() => prevPage()}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+              </li>
+
+              {paginationArray &&
+                paginationArray.map((page) => {
+                  return (
+                    <li
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className="page-item"
+                    >
+                      <Link
+                        className={`page-link ${
+                          currentPage === page ? "active" : ""
+                        } `}
+                        href="#"
+                      >
+                        {page}
+                      </Link>
+                    </li>
+                  );
+                })}
+
+              <li className="page-item ">
+                <button
+                  className="page-link bg-dark text-white"
+                  onClick={() => nextPage()}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
+
+          <select
+            className="form-select w-25"
+            onChange={(e) => setpageSize(e.target.value)}
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </div>
       </div>
     </>
   );

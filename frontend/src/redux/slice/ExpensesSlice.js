@@ -3,11 +3,11 @@ import axios from "axios";
 
 const HOSTNAME = "http://localhost:8000";
 
-export const getExpensesAsync = createAsyncThunk("expenses/get ", async () => {
+export const getExpensesAsync = createAsyncThunk("expenses/get ", async ({currentPage , pageSize}) => {
   try {
     // console.log("----> " ,  fullName , email , password  );
     const token = localStorage.getItem("loggedDataToken");
-    const response = await axios.get(`${HOSTNAME}/expense/getExpenses/`, {
+    const response = await axios.get(`${HOSTNAME}/expense/getExpenses?page=${currentPage}&pageSize=${pageSize}`, {
       headers: { Authorization: `${token}` },
     });
 

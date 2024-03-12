@@ -9,20 +9,14 @@ const fileDownload = db.fileDownload;
 
 // const
 const getExpenses = async (req, res) => {
-  // console.log( "----> req.user.id - " , req.user.id)
+  // console.log("req.query.page - " , req.query.page  );
+  // console.log("req.query.pageSize - " , req.query.pageSize  );
 
-  if (req.user.id === null) {
-    let query = await Expenses.findAll({
-      include: [
-        {
-          model: Users,
-          model: Category,
-        },
-      ],
-    });
-    res.status(200).send(query);
-  } else {
-    let query = await Expenses.findAll({
+  try {
+    const page = parseInt(req.query.page);
+    const itemsPerPage = parseInt(req.query.pageSize);
+
+    let expenseQuery = await Expenses.findAndCountAll({
       include: [
         {
           model: Users,
@@ -31,8 +25,21 @@ const getExpenses = async (req, res) => {
       ],
 
       where: { user_id: req.user.id },
+      // page no
+      offset: (page - 1) * itemsPerPage,
+      limit: itemsPerPage,
     });
-    res.status(200).send(query);
+
+    // console.log(" expenseQuery.length -  " , expenseQuery.length )
+
+    const totalPages = Math.ceil(expenseQuery.count / itemsPerPage);
+
+    res.status(200).send({
+      totalPages,
+      expenses: expenseQuery.rows,
+    });
+  } catch (error) {
+    res.status(500).send(error);
   }
 };
 
