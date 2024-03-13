@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 import { useSelector, useDispatch } from "react-redux";
 import { FaFacebook, FaInstagramSquare, FaLinkedin } from "react-icons/fa";
-import { forgotPasswordByEmailAsync } from "../redux/slice/UsersSlice";
-import { RotatingLines } from "react-loader-spinner";
+import { resetPasswordByRequestTokenAsync } from "../redux/slice/UsersSlice";
 
 const ForgotPassword = () => {
   const usersRedux = useSelector((state) => state.users);
   const dispatch = useDispatch();
+  const location = useLocation();
+
   const SignupSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email Required"),
+    password: Yup.string().min("5", "Too Short").required("Password Required"),
   });
 
   return (
@@ -46,17 +48,18 @@ const ForgotPassword = () => {
 
         <div className="rightSide col-12 col-md-6 bg-white">
           <Formik
-            initialValues={{ email: "" }}
+            initialValues={{ password: "" }}
             validationSchema={SignupSchema}
             onSubmit={(values) => {
               // console.log(values);
+
               dispatch(
-                forgotPasswordByEmailAsync({
-                  email: values.email,
+                resetPasswordByRequestTokenAsync({
+                  requestToken: location.pathname.split("/")[3],
+                  newPassword: values.password,
                 })
               );
-
-              values.email = " ";
+              values.password = " ";
             }}
           >
             {({
@@ -72,21 +75,23 @@ const ForgotPassword = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
-                    Your Email
+                    Your New Password
                   </label>
 
                   <input
-                    type="email"
-                    name="email"
+                    type="password"
+                    name="password"
                     id="email"
                     className="form-control"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.email}
+                    value={values.password}
                   />
                   <p className="error">
                     {" "}
-                    {errors.email && touched.email && errors.email}{" "}
+                    {errors.password &&
+                      touched.password &&
+                      errors.password}{" "}
                   </p>
                 </div>
 
@@ -95,18 +100,13 @@ const ForgotPassword = () => {
                   className="btn btn-md w-100 text-white mt-2 "
                   style={{ backgroundColor: "#2F2CD8" }}
                 >
-                  Forgot It
+                  Change Password
                 </button>
               </form>
             )}
           </Formik>
 
-          <div className="mt-4 alreadyHaveAccount d-flex flex-row justify-content-between ">
-            <p>
-              {" "}
-              Already have an account? <Link to="/signin"> Sign In </Link>{" "}
-            </p>
-
+          <div className="mt-4 ">
             <div className="text-center" style={{ height: "25px" }}>
               {usersRedux.isLoading === true ? (
                 <RotatingLines

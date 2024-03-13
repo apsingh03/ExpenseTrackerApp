@@ -273,6 +273,8 @@ const Dashboard = () => {
             {/* <LineChart /> */}
           </div>
         </div>
+
+
         <div className="col-12 col-md-6 col-lg-3">
           <div className="card">
             <h6>Monthly expense breakdown</h6>
@@ -322,6 +324,8 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        
       </div>
     </>
   );

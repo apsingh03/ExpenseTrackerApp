@@ -24,6 +24,40 @@ export const getUserByUserIdAsync = createAsyncThunk(
   }
 );
 
+export const forgotPasswordByEmailAsync = createAsyncThunk(
+  "users/forgotPassword",
+  async ({ email }) => {
+    try {
+      // console.log("its working" , email );
+      const response = await axios.post(`${HOSTNAME}/users/forgotPassword`, {
+        email: email,
+      });
+      return response.data;
+    } catch (error) {
+      console.log("Error  ", error);
+    }
+  }
+);
+
+export const resetPasswordByRequestTokenAsync = createAsyncThunk(
+  "users/resetPassword",
+  async ({ requestToken, newPassword }) => {
+    try {
+      // console.log("its working" , email );
+      const response = await axios.post(
+        `${HOSTNAME}/users/forgotPassword/resetPassword`,
+        {
+          requestToken: requestToken,
+          newPassword: newPassword,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log("Error  ", error);
+    }
+  }
+);
+
 export const createUserAsync = createAsyncThunk(
   "users/createUser",
   async ({ fullName, email, password }) => {
@@ -108,6 +142,62 @@ export const usersSlice = createSlice({
       })
 
       .addCase(createUserAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+
+      .addCase(forgotPasswordByEmailAsync.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(forgotPasswordByEmailAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+
+        if (
+          action.payload.success === false &&
+          action.payload.msg === "User Doesn't Exist"
+        ) {
+          alert(action.payload.msg);
+        }
+
+        if (
+          action.payload.success === true &&
+          action.payload.msg ===
+            "Link for reset the password is successfully send on your Mail Id!"
+        ) {
+          alert(action.payload.msg);
+        }
+      })
+
+      .addCase(forgotPasswordByEmailAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+
+      .addCase(resetPasswordByRequestTokenAsync.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(resetPasswordByRequestTokenAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // console.log( action.payload );
+        if (
+          action.payload.success === false &&
+          action.payload.msg === "Invalid Token"
+        ) {
+          alert(action.payload.msg);
+        }
+
+        if (
+          action.payload.success === true &&
+          action.payload.msg === "Password Changed"
+        ) {
+          alert(action.payload.msg);
+          window.location.replace("/signin");
+        }
+      })
+
+      .addCase(resetPasswordByRequestTokenAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });

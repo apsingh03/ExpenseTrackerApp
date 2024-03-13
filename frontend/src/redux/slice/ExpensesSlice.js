@@ -134,11 +134,11 @@ export const expensesSlice = createSlice({
           alert(action.payload.msg);
         }
 
-        const findIndex = state.data.findIndex((data) => {
+        const findIndex = state.data.expenses.findIndex((data) => {
           return data.id === id;
         });
 
-        state.data.splice(findIndex, 1);
+        state.data.expenses.splice(findIndex, 1);
       })
 
       .addCase(deleteExpensesAsync.rejected, (state, action) => {

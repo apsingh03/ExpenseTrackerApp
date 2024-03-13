@@ -1,12 +1,14 @@
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const db = require("../model");
-const uuid = require("uuid");
-const sgMail = require("@sendgrid/mail");
+
+const { v4: uuidv4 } = require("uuid");
+const Sib = require("sib-api-v3-sdk");
 
 // models
 const Users = db.users;
 const ForgotPassword = db.forgotpassword;
+const sequelize = db.sequelize;
 
 const getRequest = async (req, res) => {
   let query = await Users.findAll({});
@@ -106,12 +108,103 @@ const forgotPasswordd = async (req, res) => {
     let findEmailQuery = await Users.findOne({ where: { email } });
 
     if (findEmailQuery) {
-      const id = uuid.v4();
+      const uuidRequestId = uuidv4();
+
+      const userId = findEmailQuery.dataValues.id;
+
+      const resetRequest = await ForgotPassword.create({
+        requestId: uuidRequestId,
+        isActive: true,
+        expiryby: Date.now() + 3600000,
+        user_id: userId,
+      });
+
+      //Set up Sendinblue API client
+      const client = Sib.ApiClient.instance;
+      const apiKey = client.authentications["api-key"];
+      apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
+
+      //Set up TransactionalEmailsApi
+      const transEmailApi = new Sib.TransactionalEmailsApi();
+
+      //define sender and receiver information
+      const sender = {
+        email: "singhajaypratap606@gmail.com",
+        name: "Ajay Pratap Singh",
+      };
+      const receivers = [
+        {
+          email,
+        },
+      ];
+
+      //Send a transactional email using Sendinblue
+      const emailResponse = await transEmailApi.sendTransacEmail({
+        sender,
+        To: receivers,
+        subject: "Expense Tracker Reset Password",
+        textContent: "link Below",
+        htmlContent: `
+      <h1 style="text-align : center , " > Welcome to Expense Tracker App </h1>
+      <h3>Hi! We got the request from you for reset the password. Here is the link below </h3>
+      <a href="http://localhost:3000/forgotPassword/resetPasswordPage/{{params.requestId}}" target="_blank" > Click Here</a>`,
+        params: {
+          requestId: uuidRequestId,
+        },
+      });
+
+      // console.log( "emailResponse - " , emailResponse )
+      // console.log( "userId - " , userId , requestId  );
+      res.status(200).send({
+        success: true,
+        msg: "Link for reset the password is successfully send on your Mail Id!",
+      });
     } else {
-      res.status(500).send({ msg: "User Doesn't Exsist" });
+      res.status(200).send({ success: false, msg: "User Doesn't Exist" });
     }
   } catch (error) {
     res.status(500).send({ error });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const t = await sequelize.transaction();
+  try {
+    const { requestToken, newPassword } = req.body;
+
+    // console.log(" req.body  " , req.body );
+
+    const checkTokenExistQuery = await ForgotPassword.findOne({
+      where: { requestId: requestToken, isActive: 1 },
+    });
+
+    if (checkTokenExistQuery) {
+      const user_id = checkTokenExistQuery.dataValues.user_id;
+
+      // console.log("user_id ---->  " , user_id , newPassword , requestToken , );
+
+      const saltRounds = 10;
+      bcrypt.hash(newPassword, saltRounds, async function (err, hash) {
+        // Store hash in your password DB.
+
+        await Users.update(
+          { password: hash },
+          { where: { id: user_id }, transaction: t }
+        );
+        await ForgotPassword.update(
+          { isActive: 0 },
+          { where: { requestId: requestToken }, transaction: t }
+        );
+
+        await t.commit();
+        res.status(200).send({ success: true, msg: "Password Changed" });
+      });
+    } else {
+      res.status(200).send({ success: false, msg: "Invalid Token" });
+    }
+  } catch (error) {
+    await t.rollback();
+    res.status(500).send(error);
   }
 };
 
@@ -121,4 +214,5 @@ module.exports = {
   loginUser,
   getRequestByUserId,
   forgotPasswordd,
+  resetPassword,
 };

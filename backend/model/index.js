@@ -78,4 +78,12 @@ db.fileDownload.belongsTo(db.users, {
   foreignKey: "user_id",
 });
 
+db.users.hasMany( db.forgotpassword , {
+  foreignKey : "user_id",
+} )
+
+db.forgotpassword.belongsTo(db.users , {
+  foreignKey : "user_id",
+})
+
 module.exports = db;
