@@ -1,16 +1,14 @@
 :root {
   --bgColorDark: #131129;
   --fontColorWhite: #fff;
-  --bluebg: #2F2CD8;
+  --bluebg: #2f2cd8;
   --fontbodyColor: #7184ad;
-  --bgColorlittleDark: #1D1933;
-
+  --bgColorlittleDark: #1d1933;
 }
 
 /* Over Ride */
 
 .form-control:focus {
-
   box-shadow: none !important;
 }
 
@@ -34,7 +32,6 @@
   padding: 40px 20px;
 }
 
-
 #signup .leftSide {
   background-color: var(--bluebg);
   padding: 40px 20px;
@@ -52,7 +49,6 @@
 #signup .leftSide div {
   padding: 0 30px;
 }
-
 
 #signup .rightSide .error {
   color: red;
@@ -79,9 +75,7 @@
 ----------- HOME PAGE 
 */
 
-
 #homePage header {
-
   background-color: var(--bgColorDark);
   padding: 25px 40px;
   position: relative;
@@ -89,7 +83,6 @@
   /* float: right; */
   right: 0;
   position: absolute;
-
 }
 
 #homePage header a {
@@ -98,14 +91,13 @@
   font-weight: 600;
 }
 
-#homePage header .iconContainer>.icon {
+#homePage header .iconContainer > .icon {
   padding-left: 25px;
 }
 
 #homePage header .icon svg {
   font-size: 30px;
   color: #fff;
-
 }
 
 #homePage header .iconContainer .icon:nth-child(3) {
@@ -117,7 +109,6 @@
   margin-left: 25px;
 }
 
-
 #homePage header .iconContainer div:nth-child(3) div {
   position: absolute;
   left: 25%;
@@ -126,7 +117,6 @@
 #homePage header .notification {
   position: relative;
   cursor: pointer;
-
 }
 
 #homePage header .notification:hover .notificationContent {
@@ -143,7 +133,6 @@
   z-index: 1;
   box-shadow: 10px 10px 23px -6px rgb(47 44 216);
   display: none;
-
 }
 
 #homePage header .notification .notificationContent a {
@@ -154,21 +143,16 @@
   font-size: 15px;
   font-weight: 500;
   color: #fff;
-
-
 }
 
-#homePage header .notification .notificationContent>a:not(:last-child) {
+#homePage header .notification .notificationContent > a:not(:last-child) {
   border-bottom: 1px solid #ddd;
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-#homePage header .notification .notificationContent>a:hover {
+#homePage header .notification .notificationContent > a:hover {
   background-color: var(--bluebg);
-
-
 }
-
 
 /* 
 ------- Side NAVIGATION .belowLeftSide
@@ -180,32 +164,27 @@
   width: 6%;
 }
 
-#homePage .belowLeftSide>div {
-
+#homePage .belowLeftSide > div {
   /* width: 100%; */
   padding: 20px 43px;
 }
 
-
 #homePage .belowLeftSide a {
   /* font-size: 40px; */
   text-decoration: none;
-
-
 }
 
 #homePage .belowLeftSide nav {
   margin-top: 80%;
 }
 
-#homePage .belowLeftSide nav>div {
+#homePage .belowLeftSide nav > div {
   margin-bottom: 25px;
 }
 
 #homePage .belowLeftSide .icon svg {
   font-size: 35px;
   color: #fff;
-
 }
 
 /* 
@@ -213,11 +192,10 @@
 */
 #homePage .belowRightSide {
   /* float: right; */
-  /* height: 100vh; */
+  min-height: 100vh;
   width: 94%;
   background-color: var(--bgColorDark);
   margin-top: 80px;
-
 }
 
 #homePage .belowRightSide .breadcrumbs a {
@@ -225,16 +203,13 @@
   display: inline-block;
   font-size: 14px;
   text-decoration: none;
-
 }
 
 #homePage .belowRightSide .breadcrumbs svg {
   margin: 0 10px;
   font-size: 20px;
   color: #7184ad;
-
 }
-
 
 /*
 ---------------  DASHBOARD  
@@ -250,7 +225,6 @@
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
-
 }
 
 #homePage .cardContainer1 div .card h6 {
@@ -280,49 +254,35 @@
   padding: 0px 10px;
 }
 
-
-
 /* 
 ---------------------------- RESPONSIVE BREAKPOINTS 
 */
 
 /* xl */
 @media only screen and (max-width: 1200px) {
-
-
   #signup {
     /* background-color: yellow; */
     padding: 50px 100px;
   }
-
 }
-
 
 /* lg */
 @media only screen and (max-width: 992px) {
-
-
   #signup {
     background-color: red;
     padding: 50px;
   }
-
-
 }
 
 /* md */
 @media only screen and (max-width: 768px) {
-
-
   #signup {
     /* background-color: green; */
     height: auto;
     padding: 20px;
   }
 
-
   #signup .leftSide {
-
     border-top-right-radius: 10px;
   }
 
@@ -331,14 +291,10 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
   }
-
 }
-
 
 /* sm */
 @media only screen and (max-width: 576px) {
-
-
   #signup {
     background-color: black;
     height: auto;
@@ -355,5 +311,4 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
   }
-
 }

@@ -35,9 +35,9 @@ const Expenses = () => {
     money: Yup.number().min(10, "Greater than 10").required("Money  Required"),
   });
 
+  // pagination
   const totalPagesRedux = expensesRedux.data?.totalPages;
   const paginationArray = Array.from(Array(totalPagesRedux).keys()).splice(1);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [pageSize, setpageSize] = useState(5);
@@ -47,7 +47,7 @@ const Expenses = () => {
       setTotalPages(expensesRedux.data?.totalPages);
     }
   }
-  
+
   useEffect(() => {
     dispatch(getCategoryAsync());
     dispatch(
@@ -278,8 +278,8 @@ const Expenses = () => {
             </tr>
           </thead>
           <tbody>
-            {expensesRedux.data.expenses &&
-              expensesRedux.data.expenses.map((data, index) => {
+            {expensesRedux.data?.expenses &&
+              expensesRedux.data?.expenses.map((data, index) => {
                 return (
                   <tr key={index} className="text-center">
                     <th> {index + 1} </th>

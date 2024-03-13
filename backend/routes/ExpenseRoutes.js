@@ -6,7 +6,11 @@ const userAuthentication = require("../middleware/auth");
 router.get(
   "/getExpenses",
   userAuthentication.authenticate,
-  ExpenseController.getExpenses
+  ExpenseController.getExpensesWithPagination
+);
+router.get(
+  "/getExpensesByDates",
+  ExpenseController.getExpensesByDates
 );
 router.post(
   "/createExpense",

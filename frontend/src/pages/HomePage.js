@@ -1,15 +1,11 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
-
 import Header from "../components/Header";
 import SideHeader from "../components/SideHeader";
-import LineChart from "../components/charts/LineChart";
-import PieChart from "../components/charts/PieChart";
 import Dashboard from "../components/Dashboard";
 import Expenses from "../components/Expenses";
 import Budget from "../components/Budget";
 import Category from "../components/Category";
-import ChartData from "../components/ChartData";
 
 const HomePage = () => {
   return (
@@ -28,10 +24,7 @@ const HomePage = () => {
               <Route path="/expenses" element={<Expenses />} />
               <Route path="/budget" element={<Budget />} />
               <Route path="/category" element={<Category />} />
-              <Route path="/chartData" element={<ChartData />} />
             </Routes>
-
-            {/* <Dashboard /> */}
           </main>
         </section>
       </div>

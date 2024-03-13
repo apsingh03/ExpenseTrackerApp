@@ -3,19 +3,44 @@ import axios from "axios";
 
 const HOSTNAME = "http://localhost:8000";
 
-export const getExpensesAsync = createAsyncThunk("expenses/get ", async ({currentPage , pageSize}) => {
-  try {
-    // console.log("----> " ,  fullName , email , password  );
-    const token = localStorage.getItem("loggedDataToken");
-    const response = await axios.get(`${HOSTNAME}/expense/getExpenses?page=${currentPage}&pageSize=${pageSize}`, {
-      headers: { Authorization: `${token}` },
-    });
+export const getExpensesAsync = createAsyncThunk(
+  "expenses/get ",
+  async ({ currentPage, pageSize }) => {
+    try {
+      // console.log("----> " ,  fullName , email , password  );
+      const token = localStorage.getItem("loggedDataToken");
+      const response = await axios.get(
+        `${HOSTNAME}/expense/getExpenses?page=${currentPage}&pageSize=${pageSize}`,
+        {
+          headers: { Authorization: `${token}` },
+        }
+      );
 
-    return response.data;
-  } catch (error) {
-    console.log("Error  ", error);
+      return response.data;
+    } catch (error) {
+      console.log("Error  ", error);
+    }
   }
-});
+);
+
+export const getExpensesByDatesAsync = createAsyncThunk(
+  "expenses/getbyDate ",
+  async ({ startDate, endDate, currentPage, pageSize , user_id }) => {
+    try {
+      // console.log("----> " ,  fullName , email , password  );
+      const token = localStorage.getItem("loggedDataToken");
+      const response = await axios.get(
+        `${HOSTNAME}/expense/getExpensesByDates?user_id=${user_id}&startDate=${startDate}&endDate=${endDate}&page=${currentPage}&pageSize=${pageSize}`,
+        {
+          headers: { Authorization: `${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log("Error  ", error);
+    }
+  }
+);
 
 export const createExpensesAsync = createAsyncThunk(
   "expenses/createExpense",
@@ -142,6 +167,20 @@ export const expensesSlice = createSlice({
       })
 
       .addCase(deleteExpensesAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+
+      .addCase(getExpensesByDatesAsync.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(getExpensesByDatesAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload;
+      })
+
+      .addCase(getExpensesByDatesAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });

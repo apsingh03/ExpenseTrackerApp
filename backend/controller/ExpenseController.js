@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const db = require("../model");
 const AWS = require("aws-sdk");
 
@@ -7,8 +8,7 @@ const Users = db.users;
 const sequelize = db.sequelize;
 const fileDownload = db.fileDownload;
 
-// const
-const getExpenses = async (req, res) => {
+const getExpensesWithPagination = async (req, res) => {
   // console.log("req.query.page - " , req.query.page  );
   // console.log("req.query.pageSize - " , req.query.pageSize  );
 
@@ -30,14 +30,49 @@ const getExpenses = async (req, res) => {
       limit: itemsPerPage,
     });
 
-    // console.log(" expenseQuery.length -  " , expenseQuery.length )
-
     const totalPages = Math.ceil(expenseQuery.count / itemsPerPage);
 
     res.status(200).send({
       totalPages,
       expenses: expenseQuery.rows,
     });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+const getExpensesByDates = async (req, res) => {
+  try {
+    // console.log( "start Date - " , req.query.startDate )
+    // console.log( "start Date - " , req.query.endDate )
+    console.log("id ---- \n \n \n ", req.query.user_id , "\n \n \n" );
+    
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.pageSize);
+
+    let expenseQuery = await Expenses.findAndCountAll({
+      include: [
+        {
+          model: Users,
+          model: Category,
+        },
+      ],
+
+      where: {
+        user_id: req.query.user_id,
+        date: {
+          [Sequelize.Op.between]: [req.query.startDate, req.query.endDate],
+        },
+      },
+
+      // page no
+      offset: (page - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    });
+
+    const totalPages = Math.ceil(expenseQuery.count / itemsPerPage);
+
+    res.status(200).send({ totalPages, expenses: expenseQuery.rows });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -218,7 +253,8 @@ const getDownloadHistory = async (req, res) => {
 };
 
 module.exports = {
-  getExpenses,
+  getExpensesWithPagination,
+  getExpensesByDates,
   createExpense,
   deleteExpense,
   downloadExpenseFile,
