@@ -16,7 +16,7 @@ const HomePage = () => {
         <section className="d-flex flex-row">
           <SideHeader />
 
-          <main className="belowRightSide p-5">
+          <main className="belowRightSide">
             {/* CODE HERE  */}
 
             <Routes>

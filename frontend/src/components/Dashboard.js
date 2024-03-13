@@ -130,7 +130,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div>
+            <div style={{ overflowX: "scroll" }}>
               {usersRedux.data &&
                 usersRedux.data.map((data, index) => {
                   if (data.isPremiumuser === true) {
@@ -142,7 +142,6 @@ const Dashboard = () => {
                               <h6 className="text-center ">
                                 Premium Users Download History
                               </h6>
-
                               <div className=" text-center">
                                 {fileDownloadHistoryRedux &&
                                 fileDownloadHistoryRedux.isLoading === true ? (
@@ -215,7 +214,7 @@ const Dashboard = () => {
                 })}
             </div>
 
-            <div>
+            <div style={{ overflowX: "scroll" }}>
               {usersRedux.data &&
                 usersRedux.data.map((data, index) => {
                   if (data.isPremiumuser === true) {
@@ -316,67 +315,72 @@ const Dashboard = () => {
 
             <div className=" row cardContainer2">
               <div className="col-12 col-lg-6 mb-3">
-                <div className="card">
+                <div className="card text-dark table-responsive">
                   <DateRangePicker
                     ranges={[selectionRange]}
                     onChange={handleSelect}
                   />
 
-                  <div className="d-flex flex-row justify-content-between my-4">
-                    <div>
-                      <button
-                        className="btn btn-primary btn-md"
-                        onClick={() =>
-                          dispatch(
-                            getExpensesByDatesAsync({
-                              startDate: startDatee,
-                              endDate: endDatee,
-                              currentPage,
-                              pageSize,
-                              user_id: signInRedux.loggedData.id,
-                            })
-                          )
-                        }
-                      >
-                        {" "}
-                        Click Here to fetch Data{" "}
-                      </button>
+                  <div className="d-flex flex-row justify-content-between my-3">
+                    <div className="d-flex flex-row justify-content-between">
+                      <div>
+                        <button
+                          className="btn btn-primary btn-sm"
+                          style={{ marginRight: "15px" }}
+                          onClick={() =>
+                            dispatch(
+                              getExpensesByDatesAsync({
+                                startDate: startDatee,
+                                endDate: endDatee,
+                                currentPage,
+                                pageSize,
+                                user_id: signInRedux.loggedData.id,
+                              })
+                            )
+                          }
+                        >
+                          {" "}
+                          Click Here to fetch Data{" "}
+                        </button>
+                      </div>
+
+                      <div>
+                        <Link
+                          to={`http://localhost:8000/expense/getExpensesByDates?user_id=${signInRedux.loggedData.id}&startDate=${startDatee}&endDate=${endDatee}&page=${currentPage}&pageSize=${pageSize}`}
+                          target="_blank"
+                          className="btn btn-primary btn-sm"
+                        >
+                          {" "}
+                          <span className="mx-1">
+                            <FaLink size={18} color="white" />{" "}
+                          </span>
+                          Share Data URL{" "}
+                        </Link>
+                      </div>
                     </div>
 
                     <div>
-                      <Link
-                        to={`http://localhost:8000/expense/getExpensesByDates?user_id=${signInRedux.loggedData.id}&startDate=${startDatee}&endDate=${endDatee}&page=${currentPage}&pageSize=${pageSize}`}
-                        target="_blank"
-                        className="btn btn-primary btn-md"
-                      >
-                        {" "}
-                        <span className="mx-2">
-                          <FaLink size={20} color="white" />{" "}
-                        </span>
-                        Share Data URL{" "}
-                      </Link>
-                    </div>
-
-                    <div className="text-center">
-                      {expensesRedux.isLoading === true ? (
-                        <RotatingLines
-                          visible={true}
-                          height="50"
-                          width="50"
-                          //   color="blue"
-                          strokeWidth="5"
-                          animationDuration="0.75"
-                          ariaLabel="rotating-lines-loading"
-                          wrapperStyle={{}}
-                          wrapperClass=""
-                        />
-                      ) : null}
+                      <div className="text-center">
+                        {expensesRedux.isLoading === true ? (
+                          <RotatingLines
+                            visible={true}
+                            height="25"
+                            width="25"
+                            color="red"
+                            strokeWidth="5"
+                            animationDuration="0.75"
+                            ariaLabel="rotating-lines-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                          />
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="col-12 col-lg-6">
+              <div className="col-12 col-lg-6" style={{ overflowX: "scroll" }}>
                 <div className="card">
                   <table className="table table-striped table-hover  ">
                     <thead>
@@ -483,7 +487,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="row cardContainer2">
+            <div className="row cardContainer2 mb-5 mb-lg-0">
               <div className="col-12 col-md-6 mb-3 ">
                 <div className="card">
                   <LineChart apiData={expensesRedux} />

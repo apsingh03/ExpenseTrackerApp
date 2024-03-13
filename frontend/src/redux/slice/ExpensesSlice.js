@@ -25,7 +25,7 @@ export const getExpensesAsync = createAsyncThunk(
 
 export const getExpensesByDatesAsync = createAsyncThunk(
   "expenses/getbyDate ",
-  async ({ startDate, endDate, currentPage, pageSize , user_id }) => {
+  async ({ startDate, endDate, currentPage, pageSize, user_id }) => {
     try {
       // console.log("----> " ,  fullName , email , password  );
       const token = localStorage.getItem("loggedDataToken");

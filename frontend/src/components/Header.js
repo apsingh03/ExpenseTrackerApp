@@ -129,10 +129,13 @@ const Header = () => {
     <>
       <header className="d-flex flex-row justify-content-between  ">
         <div>
+          <Link to="/" className="d-sm-inline-block d-md-none ">
+            <span className="icon">Logo</span>
+          </Link>
           <Link
             to="/signup"
             style={{ fontSize: "15px" }}
-            className="text-white text-decoration-underline mx-4"
+            className="text-white text-decoration-underline mx-2 "
           >
             Sign Up
           </Link>
@@ -144,8 +147,7 @@ const Header = () => {
               style={{ fontSize: "15px" }}
               className="text-white text-decoration-underline "
             >
-              {/* {signInRedux.loggedData.fullName} {" , "}{" "} */}
-              {signInRedux.loggedData.email}
+              {signInRedux.loggedData.email.substring(0, 8)}
             </Link>
           ) : (
             <Link
@@ -160,28 +162,30 @@ const Header = () => {
           {signInRedux.loggedData &&
           signInRedux.loggedData.isUserLogged === true ? (
             <>
-              {usersRedux.data[0] &&
-              usersRedux.data[0].isPremiumuser === true ? (
-                <p
-                  to="#"
-                  style={{ fontSize: "15px" }}
-                  className=" btn btn-primary btn-sm text-white text-decoration-underline mx-4"
-                >
-                  Already Premium User
-                </p>
-              ) : null}
-
-              {usersRedux.data[0] &&
-              usersRedux.data[0].isPremiumuser === false ? (
-                <Link
-                  to="#"
-                  style={{ fontSize: "15px" }}
-                  className=" btn btn-primary btn-sm text-white text-decoration-underline mx-4"
-                  onClick={displayRazorpay}
-                >
-                  Buy Premium
-                </Link>
-              ) : null}
+              {usersRedux.data &&
+                usersRedux.data.map((user) => {
+                  if (user.isPremiumuser === true) {
+                    return (
+                      <p
+                        style={{ fontSize: "15px" }}
+                        className=" btn btn-primary btn-sm text-white text-decoration-none mx-3"
+                      >
+                        Premium User
+                      </p>
+                    );
+                  } else {
+                    return (
+                      <Link
+                        to="#"
+                        style={{ fontSize: "15px" }}
+                        className=" btn btn-primary btn-sm text-white text-decoration-underline mx-4"
+                        onClick={displayRazorpay}
+                      >
+                        Buy Premium
+                      </Link>
+                    );
+                  }
+                })}
             </>
           ) : null}
         </div>
@@ -205,9 +209,8 @@ const Header = () => {
           <div className="icon notification ">
             <IoMdNotifications />
             <div className="notificationContent">
-              {" "}
-              <Link>One</Link> <Link>Two</Link> <Link>Three</Link>{" "}
-              <Link>Four</Link>{" "}
+              <Link>One</Link> <Link>Two</Link> <Link>Three</Link>
+              <Link>Four</Link>
             </div>
           </div>
 

@@ -122,8 +122,8 @@ const Expenses = () => {
               /* and other goodies */
             }) => (
               <form onSubmit={handleSubmit} className="p-3">
-                <div className="d-flex flex-row justify-content-between  ">
-                  <div className="col-4 mt-2">
+                <div className=" row  ">
+                  <div className="col-6 col-md-4 mt-2  order-md-0 ">
                     <div className="form-group">
                       <label
                         htmlFor="catId"
@@ -132,24 +132,6 @@ const Expenses = () => {
                       >
                         Select Budget Category
                       </label>
-
-                      {/* <Field 
-                      name="catId"
-                      as="select"
-
-                      >
-
-{categoryRedux.data &&
-                          categoryRedux.data.map((data) => {
-                            return (
-                              <option key={data.id} value={data.id}>
-                                {" "}
-                                {data.catName} - Total Budget &#x20B9;{data.budget}{" "}
-                              </option>
-                            );
-                          })}
-
-                      </Field> */}
 
                       <select
                         className="form-control"
@@ -178,7 +160,7 @@ const Expenses = () => {
                     </div>
                   </div>
 
-                  <div className="col-4 mx-2">
+                  <div className="col-6 col-md-4  order-md-1 ">
                     <label
                       htmlFor="money"
                       className="form-label  text-dark "
@@ -202,7 +184,56 @@ const Expenses = () => {
                     </p>
                   </div>
 
-                  <div className="mt-4 col-2">
+                  <div className="row  order-md-4">
+                    <div className="col-10 ">
+                      <label
+                        htmlFor="description"
+                        className="form-label  text-dark "
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Description
+                      </label>
+
+                      <input
+                        type="text"
+                        name="description"
+                        id="description"
+                        className="form-control"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.description}
+                      />
+                      <p className="error text-danger fw-bold mt-2">
+                        {" "}
+                        {errors.description &&
+                          touched.description &&
+                          errors.description}{" "}
+                      </p>
+                    </div>
+
+                    <div className="col-2">
+                      <div className="mt-4">
+                        <div className="text-center">
+                          {expensesRedux.isLoading ||
+                          categoryRedux.isLoading === true ? (
+                            <RotatingLines
+                              visible={true}
+                              height="50"
+                              width="50"
+                              //   color="blue"
+                              strokeWidth="5"
+                              animationDuration="0.75"
+                              ariaLabel="rotating-lines-loading"
+                              wrapperStyle={{}}
+                              wrapperClass=""
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-12 col-md-4 mt-4  order-md-3 ">
                     <button
                       type="submit"
                       className="btn btn-md w-100 text-white mt-2  "
@@ -212,51 +243,6 @@ const Expenses = () => {
                       Add Expense
                     </button>
                   </div>
-
-                  <div className="col-2 mt-4">
-                    <div className="text-center">
-                      {expensesRedux.isLoading ||
-                      categoryRedux.isLoading === true ? (
-                        <RotatingLines
-                          visible={true}
-                          height="50"
-                          width="50"
-                          //   color="blue"
-                          strokeWidth="5"
-                          animationDuration="0.75"
-                          ariaLabel="rotating-lines-loading"
-                          wrapperStyle={{}}
-                          wrapperClass=""
-                        />
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-12 ">
-                  <label
-                    htmlFor="description"
-                    className="form-label  text-dark "
-                    style={{ fontWeight: "bold" }}
-                  >
-                    Description
-                  </label>
-
-                  <input
-                    type="text"
-                    name="description"
-                    id="description"
-                    className="form-control"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.description}
-                  />
-                  <p className="error text-danger fw-bold mt-2">
-                    {" "}
-                    {errors.description &&
-                      touched.description &&
-                      errors.description}{" "}
-                  </p>
                 </div>
               </form>
             )}
@@ -265,52 +251,53 @@ const Expenses = () => {
       </div>
 
       <div className="mt-3 ">
-        <table className="table table-striped table-hover  ">
-          <thead>
-            <tr className="text-center">
-              <th scope="col">S.No</th>
-              <th scope="col">Category Name</th>
-              <th scope="col">Category Budget</th>
-              <th scope="col">Money</th>
+        <div className="table-responsive">
+          <table className="table table-striped table-hover  ">
+            <thead>
+              <tr className="text-center">
+                <th scope="col">S.No</th>
+                <th scope="col">Category Name</th>
+                <th scope="col">Category Budget</th>
+                <th scope="col">Money</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {expensesRedux.data?.expenses &&
+                expensesRedux.data?.expenses.map((data, index) => {
+                  return (
+                    <tr key={index} className="text-center">
+                      <th> {index + 1} </th>
+                      <td>
+                        {" "}
+                        {data?.id} {data.category && data.category.catName}
+                      </td>
+                      <td className="text-success fw-bold ">
+                        {data.category && data.category.budget}
+                      </td>
+                      <td className="text-danger fw-bold">{data.money}</td>
 
-              <th scope="col">Description</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {expensesRedux.data?.expenses &&
-              expensesRedux.data?.expenses.map((data, index) => {
-                return (
-                  <tr key={index} className="text-center">
-                    <th> {index + 1} </th>
-                    <td>
-                      {" "}
-                      {data?.id} {data.category && data.category.catName}
-                    </td>
-                    <td className="text-success fw-bold ">
-                      {data.category && data.category.budget}
-                    </td>
-                    <td className="text-danger fw-bold">{data.money}</td>
+                      <td>{data.description.substring(0, 30) + "..."}</td>
 
-                    <td>{data.description.substring(0, 30) + "..."}</td>
+                      <td>
+                        <button
+                          className="btn btn-danger btn-md"
+                          onClick={() =>
+                            dispatch(deleteExpensesAsync({ id: data.id }))
+                          }
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
 
-                    <td>
-                      <button
-                        className="btn btn-danger btn-md"
-                        onClick={() =>
-                          dispatch(deleteExpensesAsync({ id: data.id }))
-                        }
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-
-        <div className="bg-white py-3 d-flex flex-row justify-content-evenly align-items-baseline ">
+        <div className="table-responsive bg-white mb-5 py-3 d-flex flex-row justify-content-evenly align-items-baseline ">
           <nav aria-label="Page navigation">
             <ul className="pagination justify-content-center  ">
               <li className="page-item">
@@ -325,6 +312,7 @@ const Expenses = () => {
 
               {paginationArray &&
                 paginationArray.map((page) => {
+                  console.log("page ");
                   return (
                     <li
                       key={page}

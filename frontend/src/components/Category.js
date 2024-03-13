@@ -82,8 +82,8 @@ const Category = () => {
               /* and other goodies */
             }) => (
               <form onSubmit={handleSubmit}>
-                <div className="d-flex flex-row justify-content-between p-3 ">
-                  <div className="col-4 mx-2">
+                <div className="row p-3 ">
+                  <div className="col-12 col-sm-6 col-md-4 col-lg-4">
                     <label
                       htmlFor="catName"
                       className="form-label  text-dark "
@@ -107,7 +107,7 @@ const Category = () => {
                     </p>
                   </div>
 
-                  <div className="col-4 mx-2">
+                  <div className="col-12 col-sm-6 col-md-4 col-lg-4">
                     <label
                       htmlFor="budget"
                       className="form-label  text-dark "
@@ -131,7 +131,7 @@ const Category = () => {
                     </p>
                   </div>
 
-                  <div className="mt-4 col-2">
+                  <div className="col-12 col-sm-12 col-md-4 col-lg-4 mt-4">
                     <button
                       type="submit"
                       className="btn btn-md w-100 text-white mt-2  "

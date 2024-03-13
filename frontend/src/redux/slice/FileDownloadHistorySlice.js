@@ -73,10 +73,10 @@ export const fileDownloadSlice = createSlice({
 
       .addCase(getReportDownloadAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log( action.payload )
+        console.log(action.payload);
         // const { fileUrl } = action.payload;
 
-        state.data.push( action.payload.fileUrl );
+        state.data.push(action.payload.fileUrl);
       })
 
       .addCase(getReportDownloadAsync.rejected, (state, action) => {

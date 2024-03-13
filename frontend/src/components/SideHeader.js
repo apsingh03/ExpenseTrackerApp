@@ -14,8 +14,9 @@ import { BiSolidCategoryAlt } from "react-icons/bi";
 const SideHeader = () => {
   return (
     <>
-      <main className="belowLeftSide d-flex flex-column justify-content-flex-start align-items-center">
-        <div>
+      <main className="belowLeftSide">
+        {/* d-sm-none d-md-block */}
+        <div className="firstContainer">
           <div title="Logo">
             {" "}
             <Link to="#">
@@ -28,51 +29,53 @@ const SideHeader = () => {
           </div>
         </div>
 
-        <nav className="d-flex flex-column justify-content-center align-items-center">
-          <div title="Dashboard">
-            {" "}
-            <Link to="/">
+        <div className="secondContainer">
+          <nav>
+            <div title="Dashboard">
               {" "}
-              <span className="icon">
+              <Link to="/">
                 {" "}
-                <FaHome />{" "}
-              </span>{" "}
-            </Link>{" "}
-          </div>
+                <span className="icon">
+                  {" "}
+                  <FaHome />{" "}
+                </span>{" "}
+              </Link>{" "}
+            </div>
 
-          <div title="Category">
-            {" "}
-            <Link to="/category">
+            <div title="Category">
               {" "}
-              <span className="icon">
+              <Link to="/category">
                 {" "}
-                <BiSolidCategoryAlt />{" "}
-              </span>{" "}
-            </Link>{" "}
-          </div>
+                <span className="icon">
+                  {" "}
+                  <BiSolidCategoryAlt />{" "}
+                </span>{" "}
+              </Link>{" "}
+            </div>
 
-          <div title="Expenses">
-            {" "}
-            <Link to="/expenses">
+            <div title="Expenses">
               {" "}
-              <span className="icon">
+              <Link to="/expenses">
                 {" "}
-                <FaCircleDollarToSlot />{" "}
-              </span>{" "}
-            </Link>{" "}
-          </div>
+                <span className="icon">
+                  {" "}
+                  <FaCircleDollarToSlot />{" "}
+                </span>{" "}
+              </Link>{" "}
+            </div>
 
-          <div title="four">
-            {" "}
-            <Link to="#">
+            <div title="four">
               {" "}
-              <span className="icon">
+              <Link to="#">
                 {" "}
-                <FaRegUser />{" "}
-              </span>{" "}
-            </Link>{" "}
-          </div>
-        </nav>
+                <span className="icon">
+                  {" "}
+                  <FaRegUser />{" "}
+                </span>{" "}
+              </Link>{" "}
+            </div>
+          </nav>
+        </div>
       </main>
     </>
   );
