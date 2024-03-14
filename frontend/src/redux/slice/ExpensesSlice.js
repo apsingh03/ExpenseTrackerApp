@@ -132,7 +132,7 @@ export const expensesSlice = createSlice({
           action.payload.success === true
         ) {
           alert(action.payload.msg);
-          state.data.unshift(action.payload.expenses);
+          state.data.expenses.unshift(action.payload.expenses);
         }
       })
 

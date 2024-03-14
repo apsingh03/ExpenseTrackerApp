@@ -108,14 +108,25 @@ const createExpense = async (req, res) => {
       description: req.body.description,
       user_id: req.user.id,
       cat_id: req.body.cat_id,
+      date : Date.now(),
     };
 
-    const expenseQuery = await Expenses.create(data, { transaction: t });
+    const expenseQuery = await Expenses.create(data, {transaction: t });
 
+
+     const  categoryFetch = await Category.findOne({ where : {id : expenseQuery.cat_id } })
+        // console.log("sdaaf - " , categoryFetch )
     await t.commit();
+    
+    const {cat_id , createdAt , date , description , id ,money , updatedAt , user_id} = expenseQuery;
+
+    const resultData = {
+      cat_id , createdAt , date , description , id ,money , updatedAt , user_id , category : categoryFetch
+    }
+
     res
       .status(200)
-      .send({ success: true, msg: "Expenses Added", expenses: data });
+      .send({ success: true, msg: "Expenses Added", expenses: resultData });
 
     // let sumTotalExpenseQuery = await Users.findByPk(req.user.id , { transaction: t } );
     // sumTotalExpenseQuery.totalExpense += req.body.money;

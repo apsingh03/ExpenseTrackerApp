@@ -5,7 +5,7 @@ import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
 const BarChart = ({ apiData }) => {
-  console.log(apiData.data?.expenses);
+  // console.log(apiData.data?.expenses);
 
   const options = {
     indexAxis: "y",

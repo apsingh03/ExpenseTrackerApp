@@ -62,7 +62,7 @@ const Dashboard = () => {
   }
 
   function prevPage() {
-    console.log("prev page");
+    // console.log("prev page");
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
@@ -128,90 +128,6 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div style={{ overflowX: "scroll" }}>
-              {usersRedux.data &&
-                usersRedux.data.map((data, index) => {
-                  if (data.isPremiumuser === true) {
-                    return (
-                      <div key={index} className="cardContainer2">
-                        <div className="col-12">
-                          <div className="card">
-                            <div className="d-flex flex-row justify-content-between my-3">
-                              <h6 className="text-center ">
-                                Premium Users Download History
-                              </h6>
-                              <div className=" text-center">
-                                {fileDownloadHistoryRedux &&
-                                fileDownloadHistoryRedux.isLoading === true ? (
-                                  <>
-                                    <RotatingLines
-                                      visible={true}
-                                      height="20"
-                                      width="20"
-                                      // color= '#fff'
-                                      strokeWidth="5"
-                                      animationDuration="0.75"
-                                      ariaLabel="rotating-lines-loading"
-                                      wrapperStyle={{ color: "white" }}
-                                      wrapperClass=""
-                                    />
-                                  </>
-                                ) : null}
-                              </div>
-                            </div>
-
-                            <table className="table table-striped table-hover  ">
-                              <thead>
-                                <tr className="text-center">
-                                  <th scope="col">S.No</th>
-                                  <th scope="col">Download Link</th>
-                                  <th scope="col">Action</th>
-                                </tr>
-                              </thead>
-
-                              <tbody>
-                                {fileDownloadHistoryRedux &&
-                                  fileDownloadHistoryRedux.data.map(
-                                    (data, index) => {
-                                      // console.log( "url " , data )
-
-                                      return (
-                                        <tr key={index} className="text-center">
-                                          <th> {index + 1} </th>
-                                          <td className="text-dark fw-bold">
-                                            {data.url &&
-                                              data.url.substring(0, 30) + "..."}
-                                          </td>
-
-                                          <td className="text-dark fw-bold">
-                                            <Link
-                                              className=" btn btn-primary btn-sm text-white"
-                                              style={{
-                                                color: "#fff",
-                                                textDecoration: "none",
-                                              }}
-                                              target="_blank"
-                                              to={data.url}
-                                              download
-                                              title="Download It"
-                                            >
-                                              Download
-                                            </Link>
-                                          </td>
-                                        </tr>
-                                      );
-                                    }
-                                  )}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }
-                })}
             </div>
 
             <div style={{ overflowX: "scroll" }}>
@@ -303,6 +219,90 @@ const Dashboard = () => {
                                       </tr>
                                     );
                                   })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+            </div>
+
+            <div style={{ overflowX: "scroll" }}>
+              {usersRedux.data &&
+                usersRedux.data.map((data, index) => {
+                  if (data.isPremiumuser === true) {
+                    return (
+                      <div key={index} className="cardContainer2">
+                        <div className="col-12">
+                          <div className="card">
+                            <div className="d-flex flex-row justify-content-between my-3">
+                              <h6 className="text-center ">
+                                Premium Users Download History
+                              </h6>
+                              <div className=" text-center">
+                                {fileDownloadHistoryRedux &&
+                                fileDownloadHistoryRedux.isLoading === true ? (
+                                  <>
+                                    <RotatingLines
+                                      visible={true}
+                                      height="20"
+                                      width="20"
+                                      // color= '#fff'
+                                      strokeWidth="5"
+                                      animationDuration="0.75"
+                                      ariaLabel="rotating-lines-loading"
+                                      wrapperStyle={{ color: "white" }}
+                                      wrapperClass=""
+                                    />
+                                  </>
+                                ) : null}
+                              </div>
+                            </div>
+
+                            <table className="table table-striped table-hover  ">
+                              <thead>
+                                <tr className="text-center">
+                                  <th scope="col">S.No</th>
+                                  <th scope="col">Download Link</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                {fileDownloadHistoryRedux &&
+                                  fileDownloadHistoryRedux.data.map(
+                                    (data, index) => {
+                                      // console.log( "url " , data )
+
+                                      return (
+                                        <tr key={index} className="text-center">
+                                          <th> {index + 1} </th>
+                                          <td className="text-dark fw-bold">
+                                            {data.url &&
+                                              data.url.substring(0, 30) + "..."}
+                                          </td>
+
+                                          <td className="text-dark fw-bold">
+                                            <Link
+                                              className=" btn btn-primary btn-sm text-white"
+                                              style={{
+                                                color: "#fff",
+                                                textDecoration: "none",
+                                              }}
+                                              target="_blank"
+                                              to={data.url}
+                                              download
+                                              title="Download It"
+                                            >
+                                              Download
+                                            </Link>
+                                          </td>
+                                        </tr>
+                                      );
+                                    }
+                                  )}
                               </tbody>
                             </table>
                           </div>

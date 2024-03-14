@@ -312,7 +312,7 @@ const Expenses = () => {
 
               {paginationArray &&
                 paginationArray.map((page) => {
-                  console.log("page ");
+                  // console.log("page ");
                   return (
                     <li
                       key={page}
