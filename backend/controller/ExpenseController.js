@@ -254,13 +254,8 @@ const downloadExpenseFile = async (req, res) => {
 };
 
 const getDownloadHistory = async (req, res) => {
-  if (req.user.id === null) {
-    let query = await fileDownload.findAll();
-    res.status(200).json(query);
-  } else {
-    let query = await fileDownload.findAll({ user_id: req.user.id });
-    res.status(200).json(query);
-  }
+  let query = await fileDownload.findAll({ user_id: req.user.id });
+  res.status(200).json(query);
 };
 
 module.exports = {
