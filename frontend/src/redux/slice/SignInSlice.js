@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-const HOSTNAME = "http://localhost:8000";
+const HOSTNAME = process.env.REACT_APP_HOSTNAME;
 
 export const loginUserAsync = createAsyncThunk(
   "users/loginUser",

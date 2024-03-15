@@ -12,6 +12,7 @@ backend/steps.txt
 frontend/node_modules
 frontend/.pnp
 frontend/.pnp.js
+frontend/.env
 
 # testing
 frontend/coverage

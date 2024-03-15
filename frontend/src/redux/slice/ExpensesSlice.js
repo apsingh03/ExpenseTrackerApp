@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const HOSTNAME = "http://localhost:8000";
+const HOSTNAME = process.env.REACT_APP_HOSTNAME;
 
 export const getExpensesAsync = createAsyncThunk(
   "expenses/get ",
