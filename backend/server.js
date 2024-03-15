@@ -9,7 +9,12 @@ var compression = require('compression')
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+const corsOptions ={
+  origin: process.env.CORS_FRONTEND_ORIGIN , 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 app.use(helmet()); 
 // The middleware will attempt to compress response bodies for all request that traverse through the middleware,
 // compress all responses
