@@ -44,7 +44,7 @@ const Header = () => {
       return;
     }
 
-    const HOSTNAME = "http://localhost:8000";
+    const HOSTNAME = process.env.REACT_APP_HOSTNAME;
     const token = localStorage.getItem("loggedDataToken");
 
     const response = await axios.get(
@@ -57,7 +57,7 @@ const Header = () => {
     const { order } = response.data;
 
     const options = {
-      key: "rzp_test_AxRtLSqfBaLNEC", // Enter the Key ID generated from the Dashboard
+      key: process.env.REACT_APP_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
       amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: order.currency,
       name: "Expense Tracker APP",

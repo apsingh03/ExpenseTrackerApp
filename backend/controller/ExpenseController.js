@@ -43,10 +43,6 @@ const getExpensesWithPagination = async (req, res) => {
 
 const getExpensesByDates = async (req, res) => {
   try {
-    // console.log( "start Date - " , req.query.startDate )
-    // console.log( "start Date - " , req.query.endDate )
-    console.log("id ---- \n \n \n ", req.query.user_id , "\n \n \n" );
-    
     const page = parseInt(req.query.page) || 1;
     const itemsPerPage = parseInt(req.query.pageSize);
 

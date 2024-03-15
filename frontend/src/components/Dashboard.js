@@ -346,7 +346,7 @@ const Dashboard = () => {
 
                       <div>
                         <Link
-                          to={`http://localhost:8000/expense/getExpensesByDates?user_id=${signInRedux.loggedData.id}&startDate=${startDatee}&endDate=${endDatee}&page=${currentPage}&pageSize=${pageSize}`}
+                          to={`${process.env.REACT_APP_FRONTURL}/expense/getExpensesByDates?user_id=${signInRedux.loggedData.id}&startDate=${startDatee}&endDate=${endDatee}&page=${currentPage}&pageSize=${pageSize}`}
                           target="_blank"
                           className="btn btn-primary btn-sm"
                         >
