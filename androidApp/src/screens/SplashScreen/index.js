@@ -5,7 +5,7 @@ import {windowHeight, windowWidth} from '../../Utils/Dimensions';
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('HomeScreen');
+      navigation.navigate('SignUpScreen');
     }, 3000);
   }, []);
 
