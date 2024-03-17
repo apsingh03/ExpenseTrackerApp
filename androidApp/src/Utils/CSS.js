@@ -2,9 +2,7 @@ import {StyleSheet} from 'react-native';
 import {windowHeight, windowWidth} from './Dimensions';
 
 export const cssFile = StyleSheet.create({
-  parentContainer: {
-    // height: windowHeight,
-    // width: windowWidth,
+  signParentContainer: {
     flex: 1,
     backgroundColor: '#131129',
     padding: 20,
@@ -54,6 +52,30 @@ export const cssFile = StyleSheet.create({
   flexColumn: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems : "center"
+    alignItems: 'center',
+  },
+
+  bottomTabsParentContainer: {
+    backgroundColor: '#131129',
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+
+  theadText: {
+    color: '#000',
+    fontSize: 15,
+    fontWeight: 'bold',
+    // borderWidth : 1,
+    flex: 1,
+    textAlign: 'left',
+  },
+
+  tbodyText: {
+    color: '#000',
+    fontSize: 13,
+    fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'left',
   },
 });
