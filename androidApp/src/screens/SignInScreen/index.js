@@ -5,6 +5,7 @@ import {
   Button,
   TextInput,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
@@ -15,7 +16,13 @@ import * as Yup from 'yup';
 // icons
 import Entypo from 'react-native-vector-icons/Entypo';
 
+import {ActivityIndicator} from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
+import {loginUserAsync} from '../../redux/slice/SignInSlice';
+
 const SignInScreen = ({navigation}) => {
+  const dispatch = useDispatch();
+  const signInRedux = useSelector(state => state.signIn);
   const SigninSchema = Yup.object().shape({
     password: Yup.string()
       .min(2, 'Too Short!')
@@ -107,10 +114,43 @@ const SignInScreen = ({navigation}) => {
             password: '',
           }}
           validationSchema={SigninSchema}
-          onSubmit={(values, {setSubmitting}) => {
-            // same shape as initial values
+          onSubmit={async (values, {setSubmitting}) => {
+            const actionResult = await dispatch(
+              loginUserAsync({
+                email: values.email,
+                password: values.password,
+              }),
+            );
+
+            if (
+              actionResult.payload.msg === 'Logged In Successfully' &&
+              actionResult.payload.success === true
+            ) {
+              Alert.alert('', actionResult.payload.msg);
+              navigation.navigate('HomeScreen');
+            }
+
+            if (
+              actionResult.payload.msg === 'Password Wrong' &&
+              actionResult.payload.success === false
+            ) {
+              Alert.alert('', actionResult.payload.msg);
+              values.password = '';
+            }
+
+            if (
+              actionResult.payload.msg === 'User Does Not Exist' &&
+              actionResult.payload.success === false
+            ) {
+              Alert.alert('', actionResult.payload.msg);
+              values.email = '';
+              values.password = '';
+            }
+
+            //  values.password = "";
             setSubmitting(false);
-            console.log(values);
+
+            // console.log(values);
           }}>
           {({
             errors,
@@ -189,6 +229,14 @@ const SignInScreen = ({navigation}) => {
                     Click Here
                   </Text>
                 </View>
+
+                <Text style={{textAlign: 'center'}}>
+                  <ActivityIndicator
+                    animating={signInRedux?.isLoading}
+                    color={'#131129'}
+                    size={'small'}
+                  />
+                </Text>
 
                 <Text
                   style={{

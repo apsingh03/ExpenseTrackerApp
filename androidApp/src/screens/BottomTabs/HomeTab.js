@@ -7,7 +7,7 @@ import {
   ScrollView,
   Button,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {cssFile} from '../../Utils/CSS';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
 import {DataTable, Divider} from 'react-native-paper';
@@ -22,7 +22,6 @@ const HomeTab = () => {
 
   // console.log('Start Date - ', selectStartDate);
   // console.log('End Date - ', selectEndDate);
-
   return (
     <View style={cssFile.bottomTabsParentContainer}>
       <View

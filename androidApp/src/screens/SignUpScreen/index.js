@@ -5,17 +5,25 @@ import {
   Button,
   TextInput,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
 import {cssFile} from '../../Utils/CSS';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-
+import {ActivityIndicator} from 'react-native-paper';
 // icons
 import Entypo from 'react-native-vector-icons/Entypo';
 
+// redux
+import {useDispatch, useSelector} from 'react-redux';
+import {createUserAsync} from '../../redux/slice/UsersSlice';
+
 const SignUpScreen = ({navigation}) => {
+  const dispatch = useDispatch();
+  const usersRedux = useSelector(state => state.users);
+
   const SignupSchema = Yup.object().shape({
     fullName: Yup.string()
       .min(2, 'Too Short!')
@@ -112,10 +120,35 @@ const SignUpScreen = ({navigation}) => {
             password: '',
           }}
           validationSchema={SignupSchema}
-          onSubmit={(values, {setSubmitting}) => {
+          onSubmit={async (values, {setSubmitting}) => {
             // same shape as initial values
+
+            const actionResult = await dispatch(
+              createUserAsync({
+                fullName: values.fullName,
+                email: values.email,
+                password: values.password,
+              }),
+            );
+
+            if (
+              actionResult.payload.success === false &&
+              actionResult.payload.msg === 'User Already Exist'
+            ) {
+              Alert.alert(actionResult.payload.msg);
+              values.email = '';
+            }
+
+            if (
+              actionResult.payload.success === true &&
+              actionResult.payload.msg === 'Sign Up Successful'
+            ) {
+              Alert.alert(actionResult.payload.msg);
+              navigation.navigate('SignInScreen');
+            }
+
             setSubmitting(false);
-            console.log(values);
+            // console.log(values);
           }}>
           {({
             errors,
@@ -205,6 +238,34 @@ const SignUpScreen = ({navigation}) => {
                   }}
                   onPress={() => navigation.navigate('SignInScreen')}>
                   Sign In
+                </Text>
+              </View>
+
+              <View style={[cssFile.rowBetweenCenter, {marginTop: 20}]}>
+                <View style={cssFile.flexRow}>
+                  <Text
+                    style={{fontSize: 15, fontWeight: '900', color: '#7184ad'}}>
+                    Skip To Home Tab
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: '900',
+                      color: '#0d6efd',
+                      textDecorationLine: 'underline',
+                      marginLeft: 10,
+                    }}
+                    onPress={() => navigation.navigate('HomeScreen')}>
+                    Click Here
+                  </Text>
+                </View>
+
+                <Text>
+                  <ActivityIndicator
+                    animating={usersRedux?.isLoading}
+                    color={'#131129'}
+                    size={'small'}
+                  />
                 </Text>
               </View>
             </View>

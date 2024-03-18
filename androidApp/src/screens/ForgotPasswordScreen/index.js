@@ -5,6 +5,7 @@ import {
   Button,
   TextInput,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
@@ -15,12 +16,16 @@ import * as Yup from 'yup';
 // icons
 import Entypo from 'react-native-vector-icons/Entypo';
 
+import {useDispatch, useSelector} from 'react-redux';
+import {loginUserAsync} from '../../redux/slice/SignInSlice';
+import {ActivityIndicator} from 'react-native-paper';
+import {forgotPasswordByEmailAsync} from '../../redux/slice/UsersSlice';
+
 const ForgotPasswordScreen = ({navigation}) => {
+  const dispatch = useDispatch();
+  const usersRedux = useSelector(state => state.users);
+  // console.log("usersRedux - " , usersRedux )
   const forgotSchema = Yup.object().shape({
-    password: Yup.string()
-      .min(2, 'Too Short!')
-      .max(10, 'Too Long!')
-      .required('Required'),
     email: Yup.string().email('Invalid email').required('Required'),
   });
   // height : windowHeight / 3.5
@@ -104,13 +109,30 @@ const ForgotPasswordScreen = ({navigation}) => {
         <Formik
           initialValues={{
             email: '',
-            password: '',
           }}
           validationSchema={forgotSchema}
-          onSubmit={(values, {setSubmitting}) => {
-            // same shape as initial values
+          onSubmit={async (values, {setSubmitting}) => {
+            const actionResult = await dispatch(
+              forgotPasswordByEmailAsync({email: values.email}),
+            );
+
+            if (
+              actionResult.payload.success === false &&
+              actionResult.payload.msg === "User Doesn't Exist"
+            ) {
+              Alert.alert('', actionResult.payload.msg);
+            }
+
+            if (
+              actionResult.payload.success === true &&
+              actionResult.payload.msg ===
+                'Link for reset the password is successfully send on your Mail Id!'
+            ) {
+              Alert.alert('', actionResult.payload.msg);
+            }
+            values.email = '';
             setSubmitting(false);
-            console.log(values);
+            // console.log(values);
           }}>
           {({
             errors,
@@ -169,6 +191,14 @@ const ForgotPasswordScreen = ({navigation}) => {
                   }}
                   onPress={() => navigation.navigate('SignInScreen')}>
                   Sign In
+                </Text>
+
+                <Text style={{textAlign: 'center'}}>
+                  <ActivityIndicator
+                    animating={usersRedux?.isLoading}
+                    color={'#131129'}
+                    size={'small'}
+                  />
                 </Text>
               </View>
             </View>
