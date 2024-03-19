@@ -88,6 +88,13 @@ const loginUser = async (req, res) => {
             success: true,
             msg: "Logged In Successfully",
             token: token,
+            userObject : {
+              isUserLogged: true,
+              id: currentUser.id,
+              fullName: currentUser.fullName,
+              email: currentUser.email,
+              isPremiumuser: currentUser.isPremiumuser,
+            }
           });
         } else {
           return res

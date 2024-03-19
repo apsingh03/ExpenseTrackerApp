@@ -1,9 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {Alert} from 'react-native';
-// import { jwtDecode } from "jwt-decode";
-
-import {useNavigation} from '@react-navigation/native';
 
 import {BACKEND_HOSTNAME} from '@env';
 
@@ -25,11 +22,6 @@ export const loginUserAsync = createAsyncThunk(
     }
   },
 );
-
-const redirectToAnotherScreen = routeName => {
-  const navigation = useNavigation();
-  navigation.navigate('HomeScreen');
-};
 
 const initialState = {
   data: [],
@@ -73,6 +65,9 @@ export const signinSlice = createSlice({
       .addCase(loginUserAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload;
+        //  const userObject  = jwtDecode( action.payload.token );
+
+        // console.log( action.payload.token )
       })
 
       .addCase(loginUserAsync.rejected, (state, action) => {

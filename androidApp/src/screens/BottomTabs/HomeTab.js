@@ -6,6 +6,7 @@ import {
   FlatList,
   ScrollView,
   Button,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {cssFile} from '../../Utils/CSS';
@@ -15,8 +16,12 @@ import DatePicker from '../../components/StartDatePicker';
 import StartDatePicker from '../../components/StartDatePicker';
 import EndDatePicker from '../../components/EndDatePicker';
 import Chart from '../../components/Chart';
+import {
+  extractDataFromJwtToken,
+  getDataFromAsyncStorage,
+} from '../../Utils/HelperFunctions';
 
-const HomeTab = () => {
+const HomeTab = ({navigation}) => {
   const [selectStartDate, setselectStartDate] = useState('');
   const [selectEndDate, setselectEndDate] = useState('');
 
@@ -30,7 +35,7 @@ const HomeTab = () => {
           {padding: 10, backgroundColor: '#fff'},
         ]}>
         <Pressable
-          onPress={() => console.log('dsjkfaksdhfkdasj')}
+          onPress={() => navigation.navigate('SignUpScreen')}
           style={{
             borderWidth: 1,
             borderColor: '#131129',

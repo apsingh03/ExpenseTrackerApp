@@ -19,6 +19,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {ActivityIndicator} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginUserAsync} from '../../redux/slice/SignInSlice';
+import {setInAsyncStorage} from '../../Utils/HelperFunctions';
 
 const SignInScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -127,7 +128,12 @@ const SignInScreen = ({navigation}) => {
               actionResult.payload.success === true
             ) {
               Alert.alert('', actionResult.payload.msg);
-              navigation.navigate('HomeScreen');
+              console.log('payload - ', actionResult.payload.token);
+              // navigation.navigate('HomeScreen');
+              // setInAsyncStorage(actionResult.payload.token);
+              // const userObject  = jwtDecode( actionResult.payload.token );
+
+              // console.log("userObject - "  , userObject )
             }
 
             if (
