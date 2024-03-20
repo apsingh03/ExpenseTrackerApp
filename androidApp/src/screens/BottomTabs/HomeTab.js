@@ -11,22 +11,45 @@ import {
 import React, {useEffect, useState} from 'react';
 import {cssFile} from '../../Utils/CSS';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
-import {DataTable, Divider} from 'react-native-paper';
-import DatePicker from '../../components/StartDatePicker';
-import StartDatePicker from '../../components/StartDatePicker';
-import EndDatePicker from '../../components/EndDatePicker';
-import Chart from '../../components/Chart';
-import {
-  extractDataFromJwtToken,
-  getDataFromAsyncStorage,
-} from '../../Utils/HelperFunctions';
+import {getDataFromAsyncStorage} from '../../Utils/HelperFunctions';
+
+import {useSelector, useDispatch} from 'react-redux';
+import {setLoggedData} from '../../redux/slice/SignInSlice';
+import {getLeaderBoardAsync} from '../../redux/slice/getLeaderBoardSlice';
+import {getCategoryAsync} from '../../redux/slice/CategorySlice';
+import {getDownloadHistoryAsync} from '../../redux/slice/FileDownloadHistorySlice';
+import {ActivityIndicator} from 'react-native-paper';
 
 const HomeTab = ({navigation}) => {
-  const [selectStartDate, setselectStartDate] = useState('');
-  const [selectEndDate, setselectEndDate] = useState('');
+  // redux
 
-  // console.log('Start Date - ', selectStartDate);
-  // console.log('End Date - ', selectEndDate);
+  const dispatch = useDispatch();
+  const signInRedux = useSelector(state => state.signIn);
+  const leaderboardRedux = useSelector(state => state.leaderboard);
+  const usersRedux = useSelector(state => state.users);
+  const categoryRedux = useSelector(state => state.category);
+  const fileDownloadHistoryRedux = useSelector(
+    state => state.fileDownloadHistory,
+  );
+  const expensesRedux = useSelector(state => state.expenses);
+
+  const setUserLoggedDataInSlice = async () => {
+    try {
+      const data = await getDataFromAsyncStorage();
+      dispatch(setLoggedData(data)); // Dispatch action to store logged data
+    } catch (error) {
+      console.error('Error - ', error);
+    }
+  };
+
+  useEffect(() => {
+    // console.log("dashboard")
+    setUserLoggedDataInSlice();
+
+    dispatch(getLeaderBoardAsync());
+    dispatch(getCategoryAsync());
+    dispatch(getDownloadHistoryAsync());
+  }, []);
   return (
     <View style={cssFile.bottomTabsParentContainer}>
       <View
@@ -46,6 +69,18 @@ const HomeTab = ({navigation}) => {
             Sign Up
           </Text>
         </Pressable>
+
+        <Text>
+          <ActivityIndicator
+            animating={
+              categoryRedux?.isLoading ||
+              fileDownloadHistoryRedux?.isLoading ||
+              leaderboardRedux?.isLoading
+            }
+            color={'#131129'}
+            size={'small'}
+          />
+        </Text>
 
         <Pressable
           onPress={() => console.log('dsjkfaksdhfkdasj')}
@@ -74,40 +109,71 @@ const HomeTab = ({navigation}) => {
               borderColor: '#ffff',
             },
           ]}>
-          <FlatList
-            data={['', '', '']}
-            renderItem={({}) => {
-              return (
-                <>
-                  <View
-                    style={[
-                      cssFile.colBetweenCenter,
-                      {
-                        backgroundColor: '#131129',
-                        width: windowWidth / 2.5,
-                        height: 100,
-                        padding: 10,
-                        marginRight: 15,
-                        alignItems: 'center',
-                        borderWidth: 1,
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Text
-                      style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
-                      Total Categories
-                    </Text>
-                    <Text
-                      style={{fontSize: 30, color: '#fff', fontWeight: '600'}}>
-                      3
-                    </Text>
-                  </View>
-                </>
-              );
-            }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
+          <View
+            style={[
+              cssFile.colBetweenCenter,
+              {
+                backgroundColor: '#131129',
+                width: windowWidth / 2.5,
+                height: 100,
+                padding: 10,
+                marginRight: 15,
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: '#fff',
+              },
+            ]}>
+            <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+              Total Categories
+            </Text>
+            <Text style={{fontSize: 30, color: '#fff', fontWeight: '600'}}>
+              3
+            </Text>
+          </View>
+
+          <View
+            style={[
+              cssFile.colBetweenCenter,
+              {
+                backgroundColor: '#131129',
+                width: windowWidth / 2.5,
+                height: 100,
+                padding: 10,
+                marginRight: 15,
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: '#fff',
+              },
+            ]}>
+            <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+              Total Categories
+            </Text>
+            <Text style={{fontSize: 30, color: '#fff', fontWeight: '600'}}>
+              3
+            </Text>
+          </View>
+
+          <View
+            style={[
+              cssFile.colBetweenCenter,
+              {
+                backgroundColor: '#131129',
+                width: windowWidth / 2.5,
+                height: 100,
+                padding: 10,
+                marginRight: 15,
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: '#fff',
+              },
+            ]}>
+            <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+              Total Categories
+            </Text>
+            <Text style={{fontSize: 30, color: '#fff', fontWeight: '600'}}>
+              3
+            </Text>
+          </View>
         </View>
 
         <View
@@ -168,23 +234,43 @@ const HomeTab = ({navigation}) => {
               </Text>
             </View>
 
-            <View style={[cssFile.flexRow, {marginTop: 10, padding: 5}]}>
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                1
-              </Text>
+            {signInRedux?.loggedData?.isUserLogged === true ? (
+              leaderboardRedux?.data &&
+              leaderboardRedux?.data.map((data, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={[cssFile.flexRow, {marginTop: 10, padding: 5}]}>
+                    <Text style={cssFile.tbodyText} numberOfLines={1}>
+                      {index + 1}
+                    </Text>
 
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                Ajay Pratap Singh jhhhhhhhhhhhhhhhhhhhhhhhhhhh
-              </Text>
+                    <Text style={cssFile.tbodyText} numberOfLines={1}>
+                      {data?.fullname.substring(0, 5) + '...'}
+                    </Text>
 
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                Ajay@gma
-              </Text>
+                    <Text style={cssFile.tbodyText} numberOfLines={1}>
+                      {data?.email}
+                    </Text>
 
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                658
+                    <Text style={cssFile.tbodyText} numberOfLines={1}>
+                      {data?.totalExpense}
+                    </Text>
+                  </View>
+                );
+              })
+            ) : (
+              <Text
+                style={{
+                  color: '#000',
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  padding: 10,
+                }}>
+                User Not Logged In
               </Text>
-            </View>
+            )}
           </View>
         </View>
 
@@ -201,7 +287,7 @@ const HomeTab = ({navigation}) => {
           ]}>
           <View style={cssFile.rowBetweenCenter}>
             <Text style={{fontSize: 15, fontWeight: '600', color: '#fff'}}>
-              Premium Users Download History
+              Your Download History
             </Text>
             <Text>
               <Pressable
@@ -234,132 +320,37 @@ const HomeTab = ({navigation}) => {
               </Text>
 
               <Text style={cssFile.theadText} numberOfLines={1}>
-                Full Name
+                Link
               </Text>
 
               <Text style={cssFile.theadText} numberOfLines={1}>
-                Email
-              </Text>
-
-              <Text style={cssFile.theadText} numberOfLines={1}>
-                Total Expense
+                Action
               </Text>
             </View>
 
-            <View style={[cssFile.flexRow, {marginTop: 10, padding: 5}]}>
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                1
-              </Text>
+            {signInRedux?.loggedData?.isUserLogged === true
+              ? fileDownloadHistoryRedux?.data &&
+                fileDownloadHistoryRedux?.data.map((data, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={[cssFile.flexRow, {marginTop: 10, padding: 5}]}>
+                      <Text style={cssFile.tbodyText} numberOfLines={1}>
+                        {index + 1}
+                      </Text>
 
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                Ajay Pratap Singh jhhhhhhhhhhhhhhhhhhhhhhhhhhh
-              </Text>
+                      <Text style={cssFile.tbodyText} numberOfLines={1}>
+                        {data.url && data.url.substring(0, 10) + '...'}
+                      </Text>
 
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                Ajay@gma
-              </Text>
-
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                658
-              </Text>
-            </View>
+                      <Text style={cssFile.tbodyText} numberOfLines={1}>
+                        <Button title="Delete" color={'red'} />
+                      </Text>
+                    </View>
+                  );
+                })
+              : null}
           </View>
-        </View>
-
-        <View
-          style={[
-            {
-              paddingHorizontal: 10,
-              paddingVertical: 20,
-              backgroundColor: '#1d1933',
-              marginTop: 20,
-              borderWidth: 1,
-              borderColor: '#ffff',
-            },
-          ]}>
-          <View style={cssFile.rowBetweenCenter}>
-            <View style={cssFile.flexRow}>
-              <Text style={{marginRight: 10}}>
-                <StartDatePicker setselectStartDate={setselectStartDate} />
-
-                {/* <Text style={{ fontSize : 20, color : "#fff" }} > {selectStartDate  } </Text> */}
-              </Text>
-
-              <Text>
-                <EndDatePicker setselectEndDate={setselectEndDate} />
-
-                {/* <Text> {selectEndDate} </Text> */}
-              </Text>
-            </View>
-
-            <View>
-              <Button
-                title="Click Here"
-                color={'#2f2cd8'}
-                onPress={() => console.log('Fetching Data')}
-              />
-            </View>
-          </View>
-
-          <View
-            style={[
-              cssFile.flexColumn,
-              {marginTop: 15, backgroundColor: '#fff', padding: 10},
-            ]}>
-            <View
-              style={[
-                cssFile.flexRow,
-                {borderBottomWidth: 0.5, borderBottomColor: '#000', padding: 5},
-              ]}>
-              <Text style={cssFile.theadText} numberOfLines={1}>
-                S.NO
-              </Text>
-
-              <Text style={cssFile.theadText} numberOfLines={1}>
-                Full Name
-              </Text>
-
-              <Text style={cssFile.theadText} numberOfLines={1}>
-                Email
-              </Text>
-
-              <Text style={cssFile.theadText} numberOfLines={1}>
-                Total Expense
-              </Text>
-            </View>
-
-            <View style={[cssFile.flexRow, {marginTop: 10, padding: 5}]}>
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                1
-              </Text>
-
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                Ajay Pratap Singh jhhhhhhhhhhhhhhhhhhhhhhhhhhh
-              </Text>
-
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                Ajay@gma
-              </Text>
-
-              <Text style={cssFile.tbodyText} numberOfLines={1}>
-                658
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <View
-          style={[
-            {
-              paddingHorizontal: 10,
-              paddingVertical: 0,
-              backgroundColor: '#1d1933',
-              marginTop: 20,
-              borderWidth: 1,
-              borderColor: '#ffff',
-            },
-          ]}>
-          <Chart />
         </View>
       </ScrollView>
     </View>

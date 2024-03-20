@@ -5,7 +5,7 @@ import {windowHeight, windowWidth} from '../../Utils/Dimensions';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { removeAsyncLogout } from '../../Utils/HelperFunctions';
+import {removeAsyncLogout} from '../../Utils/HelperFunctions';
 
 const UserProfileTab = ({navigation}) => {
   return (
@@ -80,7 +80,10 @@ const UserProfileTab = ({navigation}) => {
             <MaterialIcons name="logout" size={30} color={'#000'} />{' '}
           </Text>
           <Pressable
-            onPress={() =>[ removeAsyncLogout() , navigation.navigate("SignInScreen") ] }
+            onPress={() => [
+              removeAsyncLogout(),
+              navigation.navigate('SignInScreen'),
+            ]}
             style={{
               borderWidth: 1,
               borderColor: 'blue',

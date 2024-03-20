@@ -1,45 +1,53 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { Alert } from 'react-native';
-import {BACKEND_HOSTNAME} from "@env"
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import axios from 'axios';
+import {Alert} from 'react-native';
+import {BACKEND_HOSTNAME} from '@env';
+import {getTokenFromAsyncStorage} from '../../Utils/HelperFunctions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HOSTNAME = BACKEND_HOSTNAME
+const HOSTNAME = BACKEND_HOSTNAME;
 
 export const getReportDownloadAsync = createAsyncThunk(
-  "file/download",
+  'file/download',
   async () => {
     try {
-      const token = localStorage.getItem("loggedDataToken");
+      const userObjectAsyncStorage = await AsyncStorage.getItem(
+        'loggedUserObject',
+      );
+      const token = JSON.parse(userObjectAsyncStorage).token;
+
       const response = await axios.get(`${HOSTNAME}/users/downloadFile/`, {
-        headers: { Authorization: `${token}` },
+        headers: {Authorization: `${token}`},
       });
-      var a = document.createElement("a");
-      a.href = response.data.fileUrl;
-      a.download = "myexpense.csv";
-      a.click();
+      // var a = document.createElement("a");
+      // a.href = response.data.fileUrl;
+      // a.download = "myexpense.csv";
+      // a.click();
       // console.log("slice - ", response.data);
       return response.data;
     } catch (error) {
-      console.log("Error  ", error);
+      console.log('Error  ', error);
     }
-  }
+  },
 );
 
 export const getDownloadHistoryAsync = createAsyncThunk(
-  "file/downloadHistory",
+  'file/downloadHistory',
   async () => {
     try {
-      const token = localStorage.getItem("loggedDataToken");
-      const response = await axios.get(`${HOSTNAME}/users/downloadHistory/`, {
-        headers: { Authorization: `${token}` },
-      });
+      const userObjectAsyncStorage = await AsyncStorage.getItem(
+        'loggedUserObject',
+      );
+      const token = JSON.parse(userObjectAsyncStorage).token;
 
-      // console.log("slice - ", response.data);
+      const response = await axios.get(`${HOSTNAME}/users/downloadHistory/`, {
+        headers: {Authorization: `${token}`},
+      });
       return response.data;
     } catch (error) {
-      console.log("Error  ", error);
+      console.log('Error  ', error);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -49,11 +57,11 @@ const initialState = {
 };
 
 export const fileDownloadSlice = createSlice({
-  name: "fileDownload",
+  name: 'fileDownload',
   initialState,
   reducers: {},
 
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addCase(getDownloadHistoryAsync.pending, (state, action) => {
         state.isLoading = true;

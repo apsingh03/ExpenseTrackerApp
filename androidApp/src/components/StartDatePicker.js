@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const StartDatePicker = ({setselectStartDate}) => {
+const StartDatePicker = ({setstartDate}) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -16,7 +16,7 @@ const StartDatePicker = ({setselectStartDate}) => {
 
   const handleConfirm = date => {
     // console.warn('Start Date ', date);
-    setselectStartDate(date);
+    setstartDate(date);
     hideDatePicker();
   };
 

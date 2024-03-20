@@ -1,12 +1,26 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SplashScreen = ({navigation}) => {
+  const loggedOrNotRedirectAccordingly = async () => {
+    const userObjectAsyncStorage = await AsyncStorage.getItem(
+      'loggedUserObject',
+    );
+    // console.log(userObjectAsyncStorage)
+
+    if (userObjectAsyncStorage === null) {
+      navigation.navigate('SignUpScreen');
+    } else {
+      navigation.navigate('HomeScreen');
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('HomeScreen');
-    }, 3000);
+      loggedOrNotRedirectAccordingly();
+    }, 1000);
   }, []);
 
   return (
@@ -28,7 +42,7 @@ const SplashScreen = ({navigation}) => {
           fontSize: 40,
           fontWeight: 'bold',
           color: '#fff',
-          marginTop: 30,
+          marginTop: 10,
         }}>
         Expense Tracker
       </Text>

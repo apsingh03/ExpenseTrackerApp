@@ -1,7 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {Alert} from 'react-native';
 import axios from 'axios';
-
 import {BACKEND_HOSTNAME} from '@env';
 
 const HOSTNAME = BACKEND_HOSTNAME;

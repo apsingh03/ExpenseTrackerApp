@@ -1,27 +1,30 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { Alert } from "react-native";
-import {BACKEND_HOSTNAME} from "@env"
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import axios from 'axios';
+import {Alert} from 'react-native';
+import {BACKEND_HOSTNAME} from '@env';
+import {getTokenFromAsyncStorage} from '../../Utils/HelperFunctions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HOSTNAME = BACKEND_HOSTNAME
+const HOSTNAME = BACKEND_HOSTNAME;
 
-export const getCategoryAsync = createAsyncThunk("category/get ", async () => {
+export const getCategoryAsync = createAsyncThunk('category/get ', async () => {
   try {
-    // console.log("----> " ,  fullName , email , password  );
-    const token = localStorage.getItem("loggedDataToken");
+    const userObjectAsyncStorage = await AsyncStorage.getItem(
+      'loggedUserObject',
+    );
+    const token = JSON.parse(userObjectAsyncStorage).token;
     const response = await axios.get(`${HOSTNAME}/category/getCategory/`, {
-      headers: { Authorization: `${token}` },
+      headers: {Authorization: `${token}`},
     });
-
     return response.data;
   } catch (error) {
-    console.log("Error  ", error);
+    console.log('getCategoryAsync Error  ', error);
   }
 });
 
 export const createCategoryAsync = createAsyncThunk(
-  "category/create",
-  async ({ catName, budget }) => {
+  'category/create',
+  async ({catName, budget}) => {
     try {
       // console.log("----> " ,  fullName , email , password  );
       const response = await axios.post(
@@ -29,28 +32,28 @@ export const createCategoryAsync = createAsyncThunk(
         {
           catName: catName,
           budget: budget,
-        }
+        },
       );
 
       return response.data;
     } catch (error) {
-      console.log("Error  ", error);
+      console.log('createCategoryAsync Error  ', error);
     }
-  }
+  },
 );
 
 export const deleteCategoryAsync = createAsyncThunk(
-  "category/delete",
-  async ({ id }) => {
+  'category/delete',
+  async ({id}) => {
     try {
-      // console.log("----> " ,  fullName , email , password  );
+      console.log('--delete category --> ', id);
       const response = await axios.delete(`${HOSTNAME}/category/delete/${id}`);
       // console.log( response )
       return response.data;
     } catch (error) {
-      console.log("Error  ", error);
+      console.log('deleteCategoryAsync Error  ', error);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -60,11 +63,11 @@ const initialState = {
 };
 
 export const categorySlice = createSlice({
-  name: "category",
+  name: 'category',
   initialState,
   reducers: {},
 
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addCase(getCategoryAsync.pending, (state, action) => {
         state.isLoading = true;
@@ -89,17 +92,17 @@ export const categorySlice = createSlice({
 
         // console.log("payload - " , action.payload )
         if (
-          action.payload.msg === "Category Name Already Exist" &&
+          action.payload.msg === 'Category Name Already Exist' &&
           action.payload.success === false
         ) {
-          Alert.alert("" , action.payload.msg)
+          Alert.alert('', action.payload.msg);
         }
 
         if (
-          action.payload.msg === "Category Added" &&
+          action.payload.msg === 'Category Added' &&
           action.payload.success === true
         ) {
-          Alert.alert("" , action.payload.msg)
+          Alert.alert('', action.payload.msg);
           // console.log( "payload - " ,  action.payload )
           state.data.unshift(action.payload.category);
         }
@@ -117,16 +120,16 @@ export const categorySlice = createSlice({
       .addCase(deleteCategoryAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         // state.data = action.payload;
-        const { id } = action.meta.arg;
+        const {id} = action.meta.arg;
 
         if (
           action.payload.success === true &&
-          action.payload.msg === "Category Deleted"
+          action.payload.msg === 'Category Deleted'
         ) {
-          Alert.alert("" , action.payload.msg)
+          Alert.alert('', action.payload.msg);
         }
 
-        const findIndex = state.data.findIndex((data) => {
+        const findIndex = state.data.findIndex(data => {
           return data.id === id;
         });
 

@@ -1,7 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {Alert} from 'react-native';
-
 import {BACKEND_HOSTNAME} from '@env';
 
 const HOSTNAME = BACKEND_HOSTNAME;
@@ -27,34 +26,23 @@ const initialState = {
   data: [],
   isLoading: false,
   isError: false,
-  loggedData: {
-    // isUserLogged:
-    //   localStorage.getItem("loggedDataToken") !== null
-    //     ? jwtDecode(localStorage.getItem("loggedDataToken")).isUserLogged
-    //     : null,
-    // id:
-    //   localStorage.getItem("loggedDataToken") !== null
-    //     ? jwtDecode(localStorage.getItem("loggedDataToken")).id
-    //     : null,
-    // isPremiumuser:
-    //   localStorage.getItem("loggedDataToken") !== null
-    //     ? jwtDecode(localStorage.getItem("loggedDataToken")).isPremiumuser
-    //     : null,
-    // fullName:
-    //   localStorage.getItem("loggedDataToken") !== null
-    //     ? jwtDecode(localStorage.getItem("loggedDataToken")).fullName
-    //     : null,
-    // email:
-    //   localStorage.getItem("loggedDataToken") !== null
-    //     ? jwtDecode(localStorage.getItem("loggedDataToken")).email
-    //     : null,
-  },
+  loggedData: null,
 };
 
 export const signinSlice = createSlice({
   name: 'signin',
   initialState,
-  reducers: {},
+  reducers: {
+    setLoggedData(state, action) {
+      // console.log('set Logged Data reducer call');
+      state.loggedData = action.payload;
+    },
+
+    logout(state, action) {
+      // console.log('Logout reducer Called ');
+      state.loggedData = null;
+    },
+  },
 
   extraReducers: builder => {
     builder
@@ -65,9 +53,6 @@ export const signinSlice = createSlice({
       .addCase(loginUserAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload;
-        //  const userObject  = jwtDecode( action.payload.token );
-
-        // console.log( action.payload.token )
       })
 
       .addCase(loginUserAsync.rejected, (state, action) => {
@@ -77,4 +62,5 @@ export const signinSlice = createSlice({
   },
 });
 
+export const {setLoggedData, logout} = signinSlice.actions;
 export default signinSlice.reducer;

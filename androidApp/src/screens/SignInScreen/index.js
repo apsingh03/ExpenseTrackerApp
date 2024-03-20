@@ -128,12 +128,22 @@ const SignInScreen = ({navigation}) => {
               actionResult.payload.success === true
             ) {
               Alert.alert('', actionResult.payload.msg);
-              console.log('payload - ', actionResult.payload.token);
-              // navigation.navigate('HomeScreen');
-              // setInAsyncStorage(actionResult.payload.token);
-              // const userObject  = jwtDecode( actionResult.payload.token );
+              // console.log('payload - ', actionResult.payload.userObject);
+              //  {"isUserLogged":true,"id":1,"fullName":"Ajay Pratap Sin","email":"ankupran@gmail.com","isPremiumuser":true}
 
-              // console.log("userObject - "  , userObject )
+              const {id, fullName, email, isPremiumuser, isUserLogged} =
+                actionResult.payload.userObject;
+
+              const compData = {
+                token: actionResult.payload.token,
+                id,
+                fullName,
+                email,
+                isPremiumuser,
+                isUserLogged,
+              };
+              setInAsyncStorage(compData);
+              navigation.navigate('HomeScreen');
             }
 
             if (

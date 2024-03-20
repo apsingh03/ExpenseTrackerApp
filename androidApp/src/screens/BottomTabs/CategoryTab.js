@@ -7,14 +7,23 @@ import {
   FlatList,
   Pressable,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {cssFile} from '../../Utils/CSS';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
-import {DataTable, Divider} from 'react-native-paper';
+import {ActivityIndicator, DataTable, Divider} from 'react-native-paper';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  createCategoryAsync,
+  deleteCategoryAsync,
+  getCategoryAsync,
+} from '../../redux/slice/CategorySlice';
 
 const CategoryTab = () => {
+  const dispatch = useDispatch();
+  const categoryRedux = useSelector(state => state.category);
+
   const categorySchema = Yup.object().shape({
     catName: Yup.string()
       .min(2, 'Too Short!')
@@ -26,45 +35,11 @@ const CategoryTab = () => {
       .required('Required'),
   });
 
-  const [page, setPage] = React.useState(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
-  const [itemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[0],
-  );
+  useEffect(() => {
+    // // console.log("---- Category Tab UseEffect---- ");
 
-  const [items] = React.useState([
-    {
-      key: 1,
-      name: 'Cupcake',
-      calories: 356,
-      fat: 16,
-    },
-    {
-      key: 2,
-      name: 'Eclair',
-      calories: 262,
-      fat: 16,
-    },
-    {
-      key: 3,
-      name: 'Frozen yogurt',
-      calories: 159,
-      fat: 6,
-    },
-    {
-      key: 4,
-      name: 'Gingerbread',
-      calories: 305,
-      fat: 3.7,
-    },
-  ]);
-
-  const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, items.length);
-
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
+    dispatch(getCategoryAsync());
+  }, []);
 
   return (
     <View style={cssFile.bottomTabsParentContainer}>
@@ -76,10 +51,20 @@ const CategoryTab = () => {
               catBudget: '',
             }}
             validationSchema={categorySchema}
-            onSubmit={(values, {setSubmitting}) => {
+            onSubmit={async (values, {setSubmitting}) => {
               // same shape as initial values
+
+              await dispatch(
+                createCategoryAsync({
+                  catName: values.catName,
+                  budget: values.catBudget,
+                }),
+              );
+
+              values.catName = '';
+              values.catBudget = '';
               setSubmitting(false);
-              console.log(values);
+              // console.log(values);
             }}>
             {({
               errors,
@@ -140,19 +125,20 @@ const CategoryTab = () => {
                   disabled={isSubmitting}
                 />
 
-                <View style={[cssFile.rowBetweenCenter, {marginTop: 20}]}>
-                  <Text
-                    style={{fontSize: 15, fontWeight: '900', color: '#7184ad'}}>
-                    Is Loading ?
-                  </Text>
+                <View style={[{marginTop: 20}]}>
                   <Text
                     style={{
                       fontSize: 15,
                       fontWeight: '900',
                       color: '#0d6efd',
                       textDecorationLine: 'underline',
+                      textAlign: 'center',
                     }}>
-                    Yes
+                    <ActivityIndicator
+                      animating={categoryRedux?.isLoading}
+                      color={'#131129'}
+                      size={'small'}
+                    />
                   </Text>
                 </View>
               </View>
@@ -185,20 +171,20 @@ const CategoryTab = () => {
               </Text>
             </DataTable.Title>
           </DataTable.Header>
-
+          {/*  */}
           <FlatList
-            data={['', '']}
-            renderItem={({item}) => {
+            data={categoryRedux.data && categoryRedux.data}
+            renderItem={({index, item}) => {
               return (
                 <DataTable.Row key={item.key}>
-                  <DataTable.Cell>one</DataTable.Cell>
-                  <DataTable.Cell>two</DataTable.Cell>
-                  <DataTable.Cell>
-                    threeddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-                  </DataTable.Cell>
+                  <DataTable.Cell>{index + 1}</DataTable.Cell>
+                  <DataTable.Cell>{item.catName}</DataTable.Cell>
+                  <DataTable.Cell>{item.budget}</DataTable.Cell>
                   <DataTable.Cell>
                     <Pressable
-                      onPress={() => console.log('dsjkfaksdhfkdasj')}
+                      onPress={() =>
+                        dispatch(deleteCategoryAsync({id: item.id}))
+                      }
                       style={{
                         borderWidth: 1,
                         borderColor: 'red',
@@ -214,20 +200,7 @@ const CategoryTab = () => {
                 </DataTable.Row>
               );
             }}
-            vertical
             showsVerticalScrollIndicator={true}
-          />
-
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={Math.ceil(items.length / itemsPerPage)}
-            onPageChange={page => setPage(page)}
-            label={`${from + 1}-${to} of ${items.length}`}
-            numberOfItemsPerPageList={numberOfItemsPerPageList}
-            numberOfItemsPerPage={itemsPerPage}
-            onItemsPerPageChange={onItemsPerPageChange}
-            showFastPaginationControls
-            selectPageDropdownLabel={'Rows per page'}
           />
         </DataTable>
       </View>

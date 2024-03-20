@@ -8,11 +8,14 @@ import HomeTab from './BottomTabs/HomeTab';
 import CategoryTab from './BottomTabs/CategoryTab';
 import ExpensesTab from './BottomTabs/ExpensesTab';
 import UserProfileTab from './BottomTabs/UserProfileTab';
+import ChartTab from './BottomTabs/ChartTab';
 // icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+
 const HomeScreen = () => {
   return (
     <>
@@ -49,11 +52,30 @@ const HomeScreen = () => {
           }}
         />
         <BottomTab.Screen
+          name="ChartTab"
+          component={ChartTab}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Chart',
+            tabBarInactiveBackgroundColor: '#2f2cd8',
+            tabBarActiveBackgroundColor: '#fff',
+            tabBarActiveTintColor: '#2f2cd8',
+            tabBarInactiveTintColor: '#fff',
+            tabBarIcon: ({color, size}) => (
+              <FontAwesome5
+                name="chart-bar"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <BottomTab.Screen
           name="ExpensesTab"
           component={ExpensesTab}
           options={{
             headerShown: false,
-            tabBarLabel: 'Home',
+            tabBarLabel: 'Expenses',
             tabBarInactiveBackgroundColor: '#2f2cd8',
             tabBarActiveBackgroundColor: '#fff',
             tabBarActiveTintColor: '#2f2cd8',

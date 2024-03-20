@@ -6,18 +6,32 @@ import {
   TextInput,
   FlatList,
   Pressable,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {cssFile} from '../../Utils/CSS';
 import {windowHeight, windowWidth} from '../../Utils/Dimensions';
-import {DataTable, Divider} from 'react-native-paper';
+import {ActivityIndicator, DataTable, Divider} from 'react-native-paper';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import SelectDropdown from 'react-native-select-dropdown';
 import {Picker} from '@react-native-picker/picker';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  createExpensesAsync,
+  deleteExpensesAsync,
+  getExpensesAsync,
+} from '../../redux/slice/ExpensesSlice';
+import {getCategoryAsync} from '../../redux/slice/CategorySlice';
 
 // selectCategory
 const ExpensesTab = () => {
+  const dispatch = useDispatch();
+
+  const categoryRedux = useSelector(state => state.category);
+  const expensesRedux = useSelector(state => state.expenses);
+  const signinRedux = useSelector(state => state.signIn);
+  // console.log("categoryRedux - ", categoryRedux  )
   const categorySchema = Yup.object().shape({
     money: Yup.number()
       .min(100, 'Too Short!')
@@ -30,10 +44,51 @@ const ExpensesTab = () => {
       .required('Required'),
   });
 
+  const [selectDropDownCategory, setselectDropDownCategory] = useState(null);
+
+  // pagination
+  const totalPagesRedux = expensesRedux.data?.totalPages;
+  const paginationArray = Array.from(Array(totalPagesRedux).keys()).splice(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [pageSize, setpageSize] = useState(5);
+  const [numberOfItemsPerPageList] = React.useState([5, 10, 15, 20]);
+  function loadTotalPagesFromExpenses() {
+    if (expensesRedux.isLoading !== true) {
+      setTotalPages(expensesRedux.data?.totalPages);
+    }
+  }
+  // console.log( "totalPagesRedux - " , totalPagesRedux , paginationArray)
+  useEffect(() => {
+    dispatch(getCategoryAsync());
+    dispatch(
+      getExpensesAsync({
+        currentPage,
+        pageSize,
+      }),
+    );
+
+    loadTotalPagesFromExpenses();
+  }, [currentPage, pageSize, totalPagesRedux, numberOfItemsPerPageList]);
+
+  function nextPage() {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  function prevPage() {
+    console.log('prev page');
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
   const [page, setPage] = React.useState(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0],
+    // setpageSize(itemsPerPage)
   );
 
   const [items] = React.useState([
@@ -66,9 +121,9 @@ const ExpensesTab = () => {
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, items.length);
 
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
+  // React.useEffect(() => {
+  //   setPage(0);
+  // }, [itemsPerPage]);
 
   return (
     <View style={cssFile.bottomTabsParentContainer}>
@@ -76,15 +131,30 @@ const ExpensesTab = () => {
         <View style={{}}>
           <Formik
             initialValues={{
-              selectCategory: '',
               money: '',
               desc: '',
             }}
             validationSchema={categorySchema}
             onSubmit={(values, {setSubmitting}) => {
               // same shape as initial values
+
+              if (selectDropDownCategory === null) {
+                Alert.alert('Alert', 'Please Select Category');
+              } else {
+                dispatch(
+                  createExpensesAsync({
+                    money: values.money,
+                    description: values.desc,
+                    cat_id: selectDropDownCategory,
+                  }),
+                );
+              }
+
+              values.money = '';
+              values.desc = '';
+
               setSubmitting(false);
-              console.log(values);
+              // console.log(values);
             }}>
             {({
               errors,
@@ -111,9 +181,13 @@ const ExpensesTab = () => {
                     marginBottom: 5,
                   }}>
                   <SelectDropdown
-                    data={['Egypt', 'Canada', 'Australia', 'Ireland']}
+                    data={categoryRedux?.data.map(data => [
+                      data.id,
+                      data.catName,
+                    ])}
                     onSelect={(selectedItem, index) => {
-                      console.log(selectedItem, index);
+                      setselectDropDownCategory(selectedItem[0]);
+                      // console.log(selectedItem[0]);
                     }}
                     // onChangeSearchInputText={ handleBlur('selectedItem') }
                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -161,7 +235,7 @@ const ExpensesTab = () => {
                     value={values.desc}
                     placeholder="Description"
                     placeholderTextColor={'#fff'}
-                    keyboardType="numeric"
+                    keyboardType="default"
                   />
 
                   {errors.desc && touched.desc ? (
@@ -178,17 +252,20 @@ const ExpensesTab = () => {
 
                 <View style={[cssFile.rowBetweenCenter, {marginTop: 20}]}>
                   <Text
-                    style={{fontSize: 15, fontWeight: '900', color: '#7184ad'}}>
-                    Is Loading ?
-                  </Text>
-                  <Text
                     style={{
                       fontSize: 15,
                       fontWeight: '900',
                       color: '#0d6efd',
                       textDecorationLine: 'underline',
+                      textAlign: 'center',
                     }}>
-                    Yes
+                    <ActivityIndicator
+                      animating={
+                        categoryRedux?.isLoading || expensesRedux?.isLoading
+                      }
+                      color={'#131129'}
+                      size={'small'}
+                    />
                   </Text>
                 </View>
               </View>
@@ -210,11 +287,6 @@ const ExpensesTab = () => {
                 Name
               </Text>
             </DataTable.Title>
-            <DataTable.Title>
-              <Text style={{color: '#fff', fontSize: 13, fontWeight: 'bold'}}>
-                Budget
-              </Text>
-            </DataTable.Title>
 
             <DataTable.Title>
               <Text style={{color: '#fff', fontSize: 13, fontWeight: 'bold'}}>
@@ -234,74 +306,105 @@ const ExpensesTab = () => {
             </DataTable.Title>
           </DataTable.Header>
 
-          <FlatList
-            data={['', '']}
-            renderItem={({item}) => {
-              return (
-                <DataTable.Row key={item.key} style={{marginTop: 2}}>
-                  <DataTable.Cell>
-                    {' '}
-                    <Text
-                      style={{color: '#000', fontSize: 13, fontWeight: 'bold'}}
-                      numberOfLines={1}>
-                      1
-                    </Text>{' '}
-                  </DataTable.Cell>
-                  <DataTable.Cell>
-                    <Text
-                      style={{color: '#000', fontSize: 13, fontWeight: 'bold'}}
-                      numberOfLines={1}>
-                      Petrol
-                    </Text>{' '}
-                  </DataTable.Cell>
-                  <DataTable.Cell>
-                    <Text
-                      style={{color: '#000', fontSize: 13, fontWeight: 'bold'}}
-                      numberOfLines={1}>
-                      2000
-                    </Text>{' '}
-                  </DataTable.Cell>
-                  <DataTable.Cell>
-                    <Text
-                      style={{color: '#000', fontSize: 13, fontWeight: 'bold'}}
-                      numberOfLines={1}>
-                      1199
-                    </Text>{' '}
-                  </DataTable.Cell>
-                  <DataTable.Cell>
-                    <Text
-                      style={{color: '#000', fontSize: 13, fontWeight: 'bold'}}
-                      numberOfLines={1}>
-                      threeddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-                    </Text>
-                  </DataTable.Cell>
-                  <DataTable.Cell>
-                    <Pressable
-                      onPress={() => console.log('dsjkfaksdhfkdasj')}
-                      style={{
-                        borderWidth: 1,
-                        borderColor: 'red',
-                        backgroundColor: 'red',
-                        padding: 5,
-                      }}>
-                      <Text
-                        style={{color: '#fff', fontSize: 13, lineHeight: 20}}>
-                        Delete
-                      </Text>
-                    </Pressable>
-                  </DataTable.Cell>
-                </DataTable.Row>
-              );
-            }}
-            vertical
-            showsVerticalScrollIndicator={true}
-          />
+          <View style={{height: windowHeight / 3.2}}>
+            <FlatList
+              data={
+                expensesRedux.data?.expenses && expensesRedux.data?.expenses
+              }
+              renderItem={({item, index}) => {
+                return (
+                  <View>
+                    <DataTable.Row key={item.key} style={{marginTop: 2}}>
+                      <DataTable.Cell>
+                        {' '}
+                        <Text
+                          style={{
+                            color: '#000',
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                          }}
+                          numberOfLines={1}>
+                          {index + 1}
+                        </Text>{' '}
+                      </DataTable.Cell>
+                      <DataTable.Cell>
+                        <Text
+                          style={{
+                            color: '#000',
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                          }}
+                          numberOfLines={1}>
+                          {item.id}
+                        </Text>{' '}
+                      </DataTable.Cell>
+                      <DataTable.Cell>
+                        <Text
+                          style={{
+                            color: '#000',
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                          }}
+                          numberOfLines={1}>
+                          {item.budget}
+                        </Text>{' '}
+                      </DataTable.Cell>
+                      <DataTable.Cell>
+                        <Text
+                          style={{
+                            color: '#000',
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                          }}
+                          numberOfLines={1}>
+                          {item.money}
+                        </Text>{' '}
+                      </DataTable.Cell>
+                      <DataTable.Cell>
+                        <Text
+                          style={{
+                            color: '#000',
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                          }}
+                          numberOfLines={1}>
+                          {item.description.substring(0, 15) + '...'}
+                        </Text>
+                      </DataTable.Cell>
+                      <DataTable.Cell>
+                        <Pressable
+                          onPress={() =>
+                            dispatch(deleteExpensesAsync({id: item.id}))
+                          }
+                          style={{
+                            borderWidth: 1,
+                            borderColor: 'red',
+                            backgroundColor: 'red',
+                            padding: 5,
+                          }}>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 13,
+                              lineHeight: 20,
+                            }}>
+                            Delete
+                          </Text>
+                        </Pressable>
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  </View>
+                );
+              }}
+              showsVerticalScrollIndicator={true}
+            />
+          </View>
 
           <DataTable.Pagination
             page={page}
             numberOfPages={Math.ceil(items.length / itemsPerPage)}
             onPageChange={page => setPage(page)}
-            label={`${from + 1}-${to} of ${items.length}`}
+            label={`${from + 1}-${to} of ${totalPagesRedux}`}
             numberOfItemsPerPageList={numberOfItemsPerPageList}
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}

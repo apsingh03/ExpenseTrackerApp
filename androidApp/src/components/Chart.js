@@ -11,13 +11,17 @@ import {
 } from 'react-native-chart-kit';
 import {windowHeight, windowWidth} from '../Utils/Dimensions';
 
-const Chart = () => {
+const Chart = ({apiData}) => {
+  // console.log("apiData " , apiData)
+
   return (
     <View style={{flex: 1}}>
       <LineChart
         data={{
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+          // labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [
+            // apiData.map( (data) =>  { return data.money} )
+            // apiData && apiData.money
             {
               data: [
                 Math.random() * 100,

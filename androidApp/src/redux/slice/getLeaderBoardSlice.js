@@ -1,28 +1,33 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { Alert } from 'react-native';
-import {BACKEND_HOSTNAME} from "@env"
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import axios from 'axios';
+import {Alert} from 'react-native';
+import {BACKEND_HOSTNAME} from '@env';
+import {getTokenFromAsyncStorage} from '../../Utils/HelperFunctions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HOSTNAME = BACKEND_HOSTNAME
+const HOSTNAME = BACKEND_HOSTNAME;
 
 export const getLeaderBoardAsync = createAsyncThunk(
-  "leaderboard/get ",
+  'leaderboard/get ',
   async () => {
     try {
-      // console.log("----> " ,  fullName , email , password  );
-      const token = localStorage.getItem("loggedDataToken");
+      const userObjectAsyncStorage = await AsyncStorage.getItem(
+        'loggedUserObject',
+      );
+      const token = JSON.parse(userObjectAsyncStorage).token;
+
       const response = await axios.get(
         `${HOSTNAME}/premium/getUserLeaderboard/`,
         {
-          headers: { Authorization: `${token}` },
-        }
+          headers: {Authorization: `${token}`},
+        },
       );
 
       return response.data;
     } catch (error) {
-      console.log("Error  ", error);
+      console.log('Error  ', error);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -32,11 +37,11 @@ const initialState = {
 };
 
 export const leaderBoardSlice = createSlice({
-  name: "leaderboard",
+  name: 'leaderboard',
   initialState,
   reducers: {},
 
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addCase(getLeaderBoardAsync.pending, (state, action) => {
         state.isLoading = true;
