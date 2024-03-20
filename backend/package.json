@@ -24,6 +24,8 @@
     "razorpay": "^2.9.2",
     "sequelize": "^6.37.1",
     "sib-api-v3-sdk": "^8.5.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.1"
   }
 }

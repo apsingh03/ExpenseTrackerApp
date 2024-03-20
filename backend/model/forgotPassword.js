@@ -2,7 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
   const ForgotPassword = sequelize.define("forgotpassword", {
-
     requestId: {
       type: DataTypes.UUID,
       allowNull: false,
