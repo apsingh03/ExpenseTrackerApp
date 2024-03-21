@@ -9,9 +9,6 @@ const sequelize = db.sequelize;
 const fileDownload = db.fileDownload;
 
 const getExpensesWithPagination = async (req, res) => {
-  // console.log("req.query.page - " , req.query.page  );
-  // console.log("req.query.pageSize - " , req.query.pageSize  );
-
   try {
     const page = parseInt(req.query.page);
     const itemsPerPage = parseInt(req.query.pageSize);
@@ -20,7 +17,14 @@ const getExpensesWithPagination = async (req, res) => {
       include: [
         {
           model: Users,
+          required: true,
+          attributes: {
+            exclude: ["password"],
+          },
+        },
+        {
           model: Category,
+          required: true,
         },
       ],
 
@@ -44,13 +48,20 @@ const getExpensesWithPagination = async (req, res) => {
 const getExpensesByDates = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const itemsPerPage = parseInt(req.query.pageSize);
+    const itemsPerPage = parseInt(req.query.pageSize) || 5;
 
     let expenseQuery = await Expenses.findAndCountAll({
       include: [
         {
           model: Users,
+          required: true,
+          attributes: {
+            exclude: ["password"],
+          },
+        },
+        {
           model: Category,
+          required: true,
         },
       ],
 
@@ -67,6 +78,7 @@ const getExpensesByDates = async (req, res) => {
     });
 
     const totalPages = Math.ceil(expenseQuery.count / itemsPerPage);
+    // console.log("expenseQuery - ", expenseQuery);
 
     res.status(200).send({ totalPages, expenses: expenseQuery.rows });
   } catch (error) {
