@@ -9,9 +9,6 @@ const sequelize = db.sequelize;
 const fileDownload = db.fileDownload;
 
 const getExpensesWithPagination = async (req, res) => {
-  // console.log("req.query.page - " , req.query.page  );
-  // console.log("req.query.pageSize - " , req.query.pageSize  );
-
   try {
     const page = parseInt(req.query.page);
     const itemsPerPage = parseInt(req.query.pageSize);
@@ -20,7 +17,14 @@ const getExpensesWithPagination = async (req, res) => {
       include: [
         {
           model: Users,
+          required: true,
+          attributes: {
+            exclude: ["password"],
+          },
+        },
+        {
           model: Category,
+          required: true,
         },
       ],
 
@@ -44,13 +48,20 @@ const getExpensesWithPagination = async (req, res) => {
 const getExpensesByDates = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const itemsPerPage = parseInt(req.query.pageSize);
+    const itemsPerPage = parseInt(req.query.pageSize) || 5;
 
     let expenseQuery = await Expenses.findAndCountAll({
       include: [
         {
           model: Users,
+          required: true,
+          attributes: {
+            exclude: ["password"],
+          },
+        },
+        {
           model: Category,
+          required: true,
         },
       ],
 
@@ -67,6 +78,7 @@ const getExpensesByDates = async (req, res) => {
     });
 
     const totalPages = Math.ceil(expenseQuery.count / itemsPerPage);
+    // console.log("expenseQuery - ", expenseQuery);
 
     res.status(200).send({ totalPages, expenses: expenseQuery.rows });
   } catch (error) {
@@ -104,21 +116,39 @@ const createExpense = async (req, res) => {
       description: req.body.description,
       user_id: req.user.id,
       cat_id: req.body.cat_id,
-      date : Date.now(),
+      date: Date.now(),
     };
 
-    const expenseQuery = await Expenses.create(data, {transaction: t });
+    const expenseQuery = await Expenses.create(data, { transaction: t });
 
-
-     const  categoryFetch = await Category.findOne({ where : {id : expenseQuery.cat_id } })
-        // console.log("sdaaf - " , categoryFetch )
+    const categoryFetch = await Category.findOne({
+      where: { id: expenseQuery.cat_id },
+    });
+    // console.log("sdaaf - " , categoryFetch )
     await t.commit();
-    
-    const {cat_id , createdAt , date , description , id ,money , updatedAt , user_id} = expenseQuery;
+
+    const {
+      cat_id,
+      createdAt,
+      date,
+      description,
+      id,
+      money,
+      updatedAt,
+      user_id,
+    } = expenseQuery;
 
     const resultData = {
-      cat_id , createdAt , date , description , id ,money , updatedAt , user_id , category : categoryFetch
-    }
+      cat_id,
+      createdAt,
+      date,
+      description,
+      id,
+      money,
+      updatedAt,
+      user_id,
+      category: categoryFetch,
+    };
 
     res
       .status(200)
