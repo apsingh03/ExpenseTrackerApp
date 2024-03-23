@@ -346,7 +346,7 @@ const Dashboard = () => {
 
                       <div>
                         <Link
-                          to={`${process.env.REACT_APP_FRONTURL}/expense/getExpensesByDates?user_id=${signInRedux.loggedData.id}&startDate=${startDatee}&endDate=${endDatee}&page=${currentPage}&pageSize=${pageSize}`}
+                          to={`https://expensetrackerbackend-v2i9.onrender.com/expense/getExpensesByDates?user_id=${signInRedux.loggedData.id}&startDate=${startDatee}&endDate=${endDatee}&page=${currentPage}&pageSize=${pageSize}`}
                           target="_blank"
                           className="btn btn-primary btn-sm"
                         >
