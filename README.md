@@ -14,13 +14,13 @@
 ## WebApp Screenshots 
 <div style="display: flex; gap: 30px;">
 
- <img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/signUpPageDesktopMode.png" alt="Screenshot 1" height="200" title="SignUp Page" />
+ <img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/signUpPageDesktopMode.png" alt="Screenshot 1" height="300" title="SignUp Page" />
 
-<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/fullSizeScreenshot.png" alt="Screenshot 1" height="200" title="Full Screen Dashboard" />
+<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/fullSizeScreenshot.png" alt="Screenshot 1" height="300" title="Full Screen Dashboard" />
 
-<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/addExpenseWebApp.png" alt="Screenshot 1" height="200" title="Add Expenses Dashboard" />
+<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/addExpenseWebApp.png" alt="Screenshot 1" height="300" title="Add Expenses Dashboard" />
 
-<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/tabModeWebApp.png" alt="Screenshot 1" height="200" title="Tablet Mode Dashboard" />
+<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Web%20Screenshots/tabModeWebApp.png" alt="Screenshot 1" height="300" title="Tablet Mode Dashboard" />
  
 </div>
 
@@ -28,13 +28,13 @@
 ## Android App Screenshots 
 <div style="display: flex; gap: 30px;">
 
- <img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/signup.png" alt="Screenshot 1" height="450" title="SignUp Page" />
+ <img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/signup.png" alt="Screenshot 1" height="350" title="SignUp Screen" />
 
-<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/homeTab.png" alt="Screenshot 1" height="450" title="SignUp Page" />
+<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/homeTab.png" alt="Screenshot 1" height="350" title="Home Tab Screen" />
 
-<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/AddCategoryTab.png" alt="Screenshot 1" height="450" title="SignUp Page" />
+<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/AddCategoryTab.png" alt="Screenshot 1" height="350" title="Add Category Tab" />
 
-<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/addExpenses.png" alt="Screenshot 1" height="450" title="SignUp Page" />
+<img src="https://raw.githubusercontent.com/apsingh03/ExpenseTrackerApp/master/screenshots/Android%20ScreenShots/addExpenses.png" alt="Screenshot 1" height="350" title="Add Expense Tab" />
  
 </div>
 
